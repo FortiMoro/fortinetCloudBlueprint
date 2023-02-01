@@ -1,6 +1,6 @@
 # fortinetCloudBlueprint - Deployment Instructions
 
-## Any changes or modification of parameters should ONLY be performed in the 000-main.bicep file
+ Any changes or modification of parameters should ONLY be performed in the 000-main.bicep file
 
 ## Obtaining the package - Commands to be run in Azure Cloud Shell (Azure CLI)
 
