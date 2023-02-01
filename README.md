@@ -4,11 +4,11 @@
 
 # Obtaining the package - Commands to be run in Azure Cloud Shell (Azure CLI)
 
-git clone https://github.com/AJLab-GH/fortinetCloudBlueprint.git
-az login
-az account list
-az account set --subscription <subscriptionID> from previous command
-cd fortinetCloudBlueprint
+- git clone https://github.com/AJLab-GH/fortinetCloudBlueprint.git
+- az login
+- az account list
+- az account set --subscription <subscriptionID> from previous command
+- cd fortinetCloudBlueprint
 
 # Create a resource group for your deployment
 //  az group create --location <location> --name <resourceGroupName>                                                               //
