@@ -14,7 +14,7 @@ cd fortinetCloudBlueprint
 //  az group create --location <location> --name <resourceGroupName>                                                               //
 
 # Deploy the templates
-//  az deployment group create --name <deploymentName> --resource-group <resourceGroupName> --template-file main.bicep             //
+//  az deployment group create --name <deploymentName> --resource-group <resourceGroupName> --template-file 000-main.bicep         //
 
 # Output resources values. i.e Public IPs, etc
 //  az deployment group show  -g <resourceGroupName>   -n <deploymentName>  --query properties.outputs                             //
