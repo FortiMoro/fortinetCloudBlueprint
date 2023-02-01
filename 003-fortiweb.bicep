@@ -65,7 +65,7 @@ var var_vnetName = ((vnetName == '') ? '${deploymentPrefix}-VNET' : vnetName)
 var subnet5Id = ((vnetNewOrExisting == 'new') ? resourceId('Microsoft.Network/virtualNetworks/subnets', var_vnetName, subnet5Name) : resourceId(vnetResourceGroup, 'Microsoft.Network/virtualNetworks/subnets', var_vnetName, subnet5Name))
 var subnet6Id = ((vnetNewOrExisting == 'new') ? resourceId('Microsoft.Network/virtualNetworks/subnets', var_vnetName, subnet6Name) : resourceId(vnetResourceGroup, 'Microsoft.Network/virtualNetworks/subnets', var_vnetName, subnet6Name))
 var fwbGlobalDataBody = 'config system settings\n set enable-file-upload enable\n end\nconfig system admin\nedit admin\nset password Q1w2e34567890--\nend\n'
-var fwbACustomDataBodyHA = 'config system ha\n set mode active-active-high-volume\n set group-id ${fortiWebHaGroupId} set group-name ${toLower(deploymentPrefix)} set priority 1\n set tunnel-local ${sn2IPfwbA} set tunnel-peer ${sn2IPfwbA}set monitor port1 port2\nend\n'
+var fwbACustomDataBodyHA = 'config system ha\n set mode active-active-high-volume\n set group-id ${fortiWebHaGroupId}\n set group-name ${toLower(deploymentPrefix)}\n set priority 1\n set tunnel-local ${sn2IPfwbA}\n set tunnel-peer ${sn2IPfwbA}\n set monitor port1 port2\nend\n'
 var fwbACustomDataBody = '${fwbGlobalDataBody}${fwbACustomDataBodyHA}${fortiWebAAdditionalCustomData}\n'
 var fwbACustomDataCombined = { 
   'cloud-initd' : 'enable'
@@ -86,10 +86,10 @@ var fwbACustomDataCombined = {
   HaGroupName: toLower(deploymentPrefix)
   HaOverride: fortiWebHaOverride
   FwbLicenseBYOL: fortiWebALicenseBYOL
-  
-}
+  }
+
 var fwbACustomData = base64(string(fwbACustomDataCombined))
-var fwbBCustomDataBodyHA = 'config system ha\n set mode active-active-high-volume\n set group-id ${fortiWebHaGroupId} set group-name ${toLower(deploymentPrefix)} set priority 2\n set tunnel-local ${sn2IPfwbB} set tunnel-peer ${sn2IPfwbA}set monitor port1 port2\nend\n'
+var fwbBCustomDataBodyHA = 'config system ha\n set mode active-active-high-volume\n set group-id ${fortiWebHaGroupId}\n set group-name ${toLower(deploymentPrefix)}\n set priority 2\n set tunnel-local ${sn2IPfwbB}\n set tunnel-peer ${sn2IPfwbA}\n set monitor port1 port2\nend\n'
 var fwbBCustomDataBody = '${fwbGlobalDataBody}${fwbBCustomDataBodyHA}${fortiWebBAdditionalCustomData}\n'
 var fwbbCustomDataCombined = { 
   'cloud-initd': 'enable'
@@ -830,3 +830,7 @@ resource fwbBVmName 'Microsoft.Compute/virtualMachines@2022-08-01' = {
 output fortiWebPublicIP string = ((publicIPNewOrExistingOrNone == 'new') ? reference(publicIPId).ipAddress : '')
 output fwbACustomData string = fwbACustomData
 output fwbBCustomData string = fwbBCustomData
+
+
+
+

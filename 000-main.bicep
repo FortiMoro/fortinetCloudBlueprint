@@ -18,10 +18,11 @@
 //                                                                                                                                 //
 //  Deployment Commands for Alex's PoC <----Remove:                                                                                //
 //  az group create --location CanadaCentral --name AJLab-BlPrt-RG                                                                 //
-//  az deployment group create --name fortinetCloudBlueprint --resource-group AJLab-BlPrt-RG --template-file main.bicep            //
+//  az deployment group create --name fortinetCloudBlueprint --resource-group AJLab-BlPrt-RG --template-file 000-main.bicep        //
 //  az deployment group show  -g AJLab-BlPrt-RG   -n fortinetCloudBlueprint  --query properties.outputs                            //
 //                                                                                                                                 //
 //   SET fortiGateVMSKU back to BYOL                                                                                               //
+//   SET fortiWebVMSKU back to BYOL                                                                                                //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -655,3 +656,4 @@ output fortiGateAManagementConsole string = 'https://${fortiGateTemplate.outputs
 output fortiGateBManagementConsole string = 'https://${fortiGateTemplate.outputs.fortiGateBManagementPublicIP}:443'
 output fortiWebAManagementConsole string = 'https://${fortiWebTemplate.outputs.fortiWebPublicIP}:40030'
 output fortiWebBManagementConsole string = 'https://${fortiWebTemplate.outputs.fortiWebPublicIP}:40031'
+output fwbACustomData string = fortiWebTemplate.outputs.fwbACustomData
