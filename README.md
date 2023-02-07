@@ -33,7 +33,7 @@ This Azure BICEP template will automatically deploy a full working environment c
 - 4 public IP for services and FortiGate/FortiWeb management
 - User Defined Routes (UDR) to ensure full end-to-end communication via the FortiGate/FortiWeb deployment
 
-![Detailed View](/Images/Detailed View.png)
+![Detailed View](https://raw.githubusercontent.com/AJLab-GH/fortinetCloudBlueprint/staging/Images/Detailed%20View.png)
 
 To enhance the availability of the solution VM can be installed in different Availability Zones instead of an Availability Set. If Availability Zones deployment is selected but the location does not support Availability Zones an Availability Set will be deployed. If Availability Zones deployment is selected and Availability Zones are available in the location, FortiGate A will be placed in Zone 1, FortiGate B will be placed in Zone 2.
 
@@ -69,7 +69,7 @@ Create a resource group for your deployment
 
 - az group create --location (location) --name (resourceGroupName)
 
-![Create Resource Group](/Images/createRG.png)
+![Create Resource Group](https://raw.githubusercontent.com/AJLab-GH/fortinetCloudBlueprint/staging/Images/createRG.png)
 
 Deploy the templates
 
@@ -77,13 +77,13 @@ Deploy the templates
 
 The script will ask you a few questions to bootstrap a full deployment.
 
-![Input Variables](/Images/ProvideValue.png)
+![Input Variables](https://raw.githubusercontent.com/AJLab-GH/fortinetCloudBlueprint/staging/Images/ProvideValue.png)
 
 After deployment you can output the important values such as public IP addresses, etc that you'll need to connect to your deployment.
 
 - az deployment group show  -g (resourceGroupName)   -n (deploymentName)  --query properties.outputs
 
-![Input Variables](/Images/Outputs.png)
+![Input Variables](https://raw.githubusercontent.com/AJLab-GH/fortinetCloudBlueprint/staging/Images/Outputs.png)
 
 ## Requirements and limitations
 
