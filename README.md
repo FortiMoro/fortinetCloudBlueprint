@@ -1,5 +1,5 @@
 # Fortinet Reference Architecture for Azure
-
+![fgfwb](https://raw.githubusercontent.com/AJLab-GH/fortinetCloudBlueprint/staging/Images/fgfwb.png)
 
 ## Introduction
 
