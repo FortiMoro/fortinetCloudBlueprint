@@ -401,6 +401,7 @@ param fortiWebImageSKU string = 'fortinet_fw-vm_payg_v2'
   '6.3.17'
   '7.0.0'
   '7.0.3'
+  '7.2.0'
   'latest'
 ])
 param fortiWebImageVersion string = 'latest'
