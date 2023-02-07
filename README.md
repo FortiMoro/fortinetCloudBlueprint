@@ -33,7 +33,7 @@ This Azure BICEP template will automatically deploy a full working environment c
 - 4 public IP for services and FortiGate/FortiWeb management
 - User Defined Routes (UDR) to ensure full end-to-end communication via the FortiGate/FortiWeb deployment
 
-![Detailed View](Images/Detailed View.png)
+![Detailed View](/Images/Detailed View.png)
 
 To enhance the availability of the solution VM can be installed in different Availability Zones instead of an Availability Set. If Availability Zones deployment is selected but the location does not support Availability Zones an Availability Set will be deployed. If Availability Zones deployment is selected and Availability Zones are available in the location, FortiGate A will be placed in Zone 1, FortiGate B will be placed in Zone 2.
 
@@ -69,7 +69,7 @@ Create a resource group for your deployment
 
 - az group create --location (location) --name (resourceGroupName)
 
-![Create Resource Group](Images/createRG.png)
+![Create Resource Group](/Images/createRG.png)
 
 Deploy the templates
 
@@ -77,13 +77,13 @@ Deploy the templates
 
 The script will ask you a few questions to bootstrap a full deployment.
 
-![Input Variables](Images/ProvideValue.png)
+![Input Variables](/Images/ProvideValue.png)
 
 After deployment you can output the important values such as public IP addresses, etc that you'll need to connect to your deployment.
 
 - az deployment group show  -g (resourceGroupName)   -n (deploymentName)  --query properties.outputs
 
-![Input Variables](Images/Outputs.png)
+![Input Variables](/Images/Outputs.png)
 
 ## Requirements and limitations
 
@@ -98,7 +98,7 @@ The Bicep template deploys different resources and it is required to have the ac
 - The password provided during deployment must need password complexity rules from Microsoft Azure:
   - It must be 12 characters or longer
   - It needs to contain characters from at least 3 of the following groups: uppercase characters, lowercase characters, numbers, and special characters excluding '\' or '-'
-  
+
 - The terms for the FortiGate PAYG or BYOL image in the Azure Marketplace needs to be accepted once before usage. This is done automatically during deployment via the Azure Portal. For the Azure CLI the commands below need to be run before the first deployment in a subscription.
   - BYOL
 `az vm image terms accept --publisher fortinet --offer fortinet_fortigate-vm_v5 --plan fortinet_fg-vm`
