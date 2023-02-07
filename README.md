@@ -41,10 +41,9 @@ This ARM template can also be used to extend or customized based on your require
 
 ## How to deploy
 
-The FortiGate solution can be deployed using the Azure Portal or Azure CLI. There are 4 variables needed to complete kickstart the deployment. The deploy.sh script will ask them automatically. When you deploy the ARM template the Azure Portal will request the variables as a requirement.
+The FortiGate solution can be deployed using the Azure Portal or Azure CLI. There are 4 variables needed to complete kickstart the deployment. The deploy.sh script will ask them automatically. When you deploy the Bicep template the Azure Portal will request the variables as a requirement.
 
-- PREFIX : This prefix will be added to each of the resources created by the templates for easy of use, manageability and visibility.
-- LOCATION : This is the Azure region where the deployment will be deployed
+- PREFIX : This prefix will be added to each of the created resources for easy of use, manageability and visibility.
 - USERNAME : The username used to login to the FortiGate GUI and SSH mangement UI.
 - PASSWORD : The password used for the FortiGate GUI and SSH management UI.
 
@@ -55,7 +54,7 @@ Azure Portal Wizard:
 
 Custom deployment:
 [![Deploy Azure Portal Button](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2F40net-cloud%2Ffortinet-azure-solutions%2Fmain%2FFortiGate%2FActive-Active-ELB-ILB%2Fazuredeploy.json)
-[![Visualize](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/visualizebutton.svg?sanitize=true)](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2F40net-cloud%2Ffortinet-azure-solutions$2Fmain%2FFortiGate%2FActive-Active-ELB-ILB%2Fazuredeploy.json)
+
 
 ### Azure CLI
 
@@ -66,23 +65,23 @@ To deploy via Azure Cloud Shell you can connect via the Azure Portal or directly
 
 git https://github.com/AJLab-GH/fortinetCloudBlueprint.git
 
-- Create a resource group for your deployment
+Create a resource group for your deployment
+
+- az group create --location (location) --name (resourceGroupName)
 
 ![Create Resource Group](Images/createRG.png)
 
-az group create --location (location) --name (resourceGroupName)
+Deploy the templates
 
-- Deploy the templates
+- az deployment group create --name (deploymentName) --resource-group (resourceGroupName) --template-file 000-main.bicep
 
-az deployment group create --name (deploymentName) --resource-group (resourceGroupName) --template-file 000-main.bicep
-
-- The script will ask you a few questions to bootstrap a full deployment.
+The script will ask you a few questions to bootstrap a full deployment.
 
 ![Input Variables](Images/ProvideValue.png)
 
-- After deployment you can output the important values such as public IP addresses, etc that you'll need to connect to your deployment.
+After deployment you can output the important values such as public IP addresses, etc that you'll need to connect to your deployment.
 
-az deployment group show  -g (resourceGroupName)   -n (deploymentName)  --query properties.outputs
+- az deployment group show  -g (resourceGroupName)   -n (deploymentName)  --query properties.outputs
 
 ![Input Variables](Images/Outputs.png)
 
@@ -91,12 +90,15 @@ az deployment group show  -g (resourceGroupName)   -n (deploymentName)  --query 
 The Bicep template deploys different resources and it is required to have the access rights and quota in your Microsoft Azure subscription to deploy the resources.
 
 - The template will deploy Standard Fs VMs for this architecture. Other VM instances are supported as well with a minimum of 4 NICs for the FortiGate deployment and 2 NICs for the FortiWeb deployment. A list can be found [here](https://docs.fortinet.com/document/fortigate/6.4.0/azure-cookbook/562841/instance-type-support)
+
 - Licenses for Fortigate/FortiWeb
   - BYOL: A demo license can be made available via your Fortinet partner or on our website. These can be injected during deployment or added after deployment. Purchased licenses need to be registered on the [Fortinet support site](http://support.fortinet.com). Download the .lic file after registration. Note, these files may not work until 60 minutes after it's initial creation.
   - PAYG or OnDemand: These licenses are automatically generated during the deployment of the FortiGate systems.
+
 - The password provided during deployment must need password complexity rules from Microsoft Azure:
   - It must be 12 characters or longer
   - It needs to contain characters from at least 3 of the following groups: uppercase characters, lowercase characters, numbers, and special characters excluding '\' or '-'
+  
 - The terms for the FortiGate PAYG or BYOL image in the Azure Marketplace needs to be accepted once before usage. This is done automatically during deployment via the Azure Portal. For the Azure CLI the commands below need to be run before the first deployment in a subscription.
   - BYOL
 `az vm image terms accept --publisher fortinet --offer fortinet_fortigate-vm_v5 --plan fortinet_fg-vm`
