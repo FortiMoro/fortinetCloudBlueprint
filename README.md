@@ -47,15 +47,19 @@ This Azure BICEP template will automatically deploy a full working environment c
 
 To enhance the availability of the solution VM can be installed in different Availability Zones instead of an Availability Set. If Availability Zones deployment is selected but the location does not support Availability Zones an Availability Set will be deployed. If Availability Zones deployment is selected and Availability Zones are available in the location, FortiGate A will be placed in Zone 1, FortiGate B will be placed in Zone 2.
 
-This ARM template can also be used to extend or customized based on your requirements. Additional subnets besides the one's mentioned above are not automatically generated. By adapting the ARM templates you can add additional subnets which prefereably require their own routing tables.
+These templates can also be used to extend or customized based on your requirements. Additional subnets besides the one's mentioned above are not automatically generated. By adapting the templates you can add additional subnets which prefereably require their own routing tables.
 
 ## How to deploy
 
-The FortiGate solution can be deployed using the Azure Portal or Azure CLI. There are 4 variables needed to complete kickstart the deployment. The deploy.sh script will ask them automatically. When you deploy the Bicep template the Azure Portal will request the variables as a requirement.
+The solution can be deployed using the Azure Portal or Azure CLI. There are 3 variables needed to complete kickstart the deployment. The BICEP deployment will ask them automatically via AZ CLI. When you deploy the ARM template the Azure Portal will request the variables as a requirement.
 
 - PREFIX : This prefix will be added to each of the created resources for easy of use, manageability and visibility.
 - USERNAME : The username used to login to the FortiGate GUI and SSH mangement UI.
 - PASSWORD : The password used for the FortiGate GUI and SSH management UI.
+
+## Making modifications to the template
+
+If you do not wish to use the OOTB values for your deployment, changes can be made to the "000-main.bicep" file. This file is the ONLY file where values can be changed or modified. Changes to the modules will be inherited from the Main File.
 
 ### Azure Portal
 
