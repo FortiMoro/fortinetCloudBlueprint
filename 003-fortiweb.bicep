@@ -66,7 +66,7 @@ var subnet5Id = ((vnetNewOrExisting == 'new') ? resourceId('Microsoft.Network/vi
 var subnet6Id = ((vnetNewOrExisting == 'new') ? resourceId('Microsoft.Network/virtualNetworks/subnets', var_vnetName, subnet6Name) : resourceId(vnetResourceGroup, 'Microsoft.Network/virtualNetworks/subnets', var_vnetName, subnet6Name))
 var fwbGlobalDataBody = 'config system settings\n set enable-file-upload enable\n end\nconfig system admin\nedit admin\nset password Q1w2e34567890--\nend\n'
 var fwbACustomDataBodyHA = 'config system ha\n set override enable\n set mode active-active-high-volume\n set group-id ${fortiWebHaGroupId}\n set group-name ${toLower(deploymentPrefix)}\n set priority 1\n set tunnel-local ${sn2IPfwbA}\n set tunnel-peer ${sn2IPfwbA}\n set monitor port1 port2\nend\n'
-var fwbACustomDataBody = '${fwbGlobalDataBody}${fwbACustomDataBodyHA}${fortiWebAAdditionalCustomData}\n'
+var fwbACustomDataBody = '${fwbGlobalDataBody}${fwbACustomDataBodyHA}${fortiWebAAdditionalCustomData}${fortiWebALicenseBYOL}\n'
 var fwbACustomDataCombined = { 
   'cloud-initd' : 'enable'
   'usr-cli': fwbACustomDataBody
