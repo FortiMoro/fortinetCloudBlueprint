@@ -37,7 +37,7 @@ This Azure BICEP template will automatically deploy a full working environment c
 
 - 2 FortiGate Firewalls in an active/passive deployment
 - 2 FortiWeb WAFs in an active/active deployment
-- 2 external Azure Standard Load Balancer for communication with internet (1x per cluster)
+- 2 Public Azure Standard Load Balancer for communication with internet (1x per cluster)
 - 2 internal Azure Standard Load Balancer to receive all internal traffic and forwarding towards Azure Gateways connecting ExpressRoute or Azure VPNs.
 - 1 VNET with 1 protected subnets
 - 4 public IP for services and FortiGate/FortiWeb management
