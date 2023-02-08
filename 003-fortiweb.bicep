@@ -65,31 +65,15 @@ var var_vnetName = ((vnetName == '') ? '${deploymentPrefix}-VNET' : vnetName)
 var subnet5Id = ((vnetNewOrExisting == 'new') ? resourceId('Microsoft.Network/virtualNetworks/subnets', var_vnetName, subnet5Name) : resourceId(vnetResourceGroup, 'Microsoft.Network/virtualNetworks/subnets', var_vnetName, subnet5Name))
 var subnet6Id = ((vnetNewOrExisting == 'new') ? resourceId('Microsoft.Network/virtualNetworks/subnets', var_vnetName, subnet6Name) : resourceId(vnetResourceGroup, 'Microsoft.Network/virtualNetworks/subnets', var_vnetName, subnet6Name))
 var fwbGlobalDataBody = 'config system settings\n set enable-file-upload enable\n end\nconfig system admin\nedit admin\nset password Q1w2e34567890--\nend\n'
-var fwbACustomDataBodyHA = 'config system ha\n set mode active-active-high-volume\n set group-id ${fortiWebHaGroupId}\n set group-name ${toLower(deploymentPrefix)}\n set priority 1\n set tunnel-local ${sn2IPfwbA}\n set tunnel-peer ${sn2IPfwbA}\n set monitor port1 port2\nend\n'
+var fwbACustomDataBodyHA = 'config system ha\n set override enable\n set mode active-active-high-volume\n set group-id ${fortiWebHaGroupId}\n set group-name ${toLower(deploymentPrefix)}\n set priority 1\n set tunnel-local ${sn2IPfwbA}\n set tunnel-peer ${sn2IPfwbA}\n set monitor port1 port2\nend\n'
 var fwbACustomDataBody = '${fwbGlobalDataBody}${fwbACustomDataBodyHA}${fortiWebAAdditionalCustomData}\n'
 var fwbACustomDataCombined = { 
   'cloud-initd' : 'enable'
   'usr-cli': fwbACustomDataBody
-  HaAzureInit: 'enable'
-  HaResourceGroupName: resourceGroup().name
-  HaSubscriptionId: haSubscriptionId
-  HaTenantId: haTenantId
-  HaApplicationId: haAppId
-  HaApplicationPassword: haAppSecret
-  HaLoadblancerName: var_externalLBName
-  HaInstanceCount: '2'
-  HaInstanceId: '1'
-  HaNamePrefix: deploymentPrefix
-  HaInstanceName: var_fwbAVmName
-  HaMode: 'active-active-high-volume'
-  HaGroupId: fortiWebHaGroupId
-  HaGroupName: toLower(deploymentPrefix)
-  HaOverride: fortiWebHaOverride
-  FwbLicenseBYOL: fortiWebALicenseBYOL
   }
 
 var fwbACustomData = base64(string(fwbACustomDataCombined))
-var fwbBCustomDataBodyHA = 'config system ha\n set mode active-active-high-volume\n set group-id ${fortiWebHaGroupId}\n set group-name ${toLower(deploymentPrefix)}\n set priority 2\n set tunnel-local ${sn2IPfwbB}\n set tunnel-peer ${sn2IPfwbA}\n set monitor port1 port2\nend\n'
+var fwbBCustomDataBodyHA = 'config system ha\n set override enable\n set mode active-active-high-volume\n set group-id ${fortiWebHaGroupId}\n set group-name ${toLower(deploymentPrefix)}\n set priority 2\n set tunnel-local ${sn2IPfwbB}\n set tunnel-peer ${sn2IPfwbA}\n set monitor port1 port2\nend\n'
 var fwbBCustomDataBody = '${fwbGlobalDataBody}${fwbBCustomDataBodyHA}${fortiWebBAdditionalCustomData}\n'
 var fwbbCustomDataCombined = { 
   'cloud-initd': 'enable'
@@ -460,7 +444,7 @@ resource externalLBName 'Microsoft.Network/loadBalancers@2022-05-01' = {
       {
         properties: {
           protocol: 'Tcp'
-          port: 80
+          port: 8080
           intervalInSeconds: 15
           numberOfProbes: 2
         }
@@ -469,7 +453,7 @@ resource externalLBName 'Microsoft.Network/loadBalancers@2022-05-01' = {
       {
         properties: {
           protocol: 'Tcp'
-          port: 443
+          port: 8443
           intervalInSeconds: 15
           numberOfProbes: 2
         }
@@ -578,7 +562,7 @@ resource fwbANic1Name 'Microsoft.Network/networkInterfaces@2022-05-01' = {
         }
       }
     ]
-    enableIPForwarding: false
+    enableIPForwarding: true
     enableAcceleratedNetworking: acceleratedNetworking
     networkSecurityGroup: {
       id: NSGId
@@ -586,6 +570,7 @@ resource fwbANic1Name 'Microsoft.Network/networkInterfaces@2022-05-01' = {
   }
   dependsOn: [
     externalLBName
+    internalLBName
   ]
 }
 
@@ -624,7 +609,7 @@ resource fwbBNic1Name 'Microsoft.Network/networkInterfaces@2022-05-01' = {
         }
       }
     ]
-    enableIPForwarding: false
+    enableIPForwarding: true
     enableAcceleratedNetworking: acceleratedNetworking
     networkSecurityGroup: {
       id: NSGId
@@ -632,6 +617,7 @@ resource fwbBNic1Name 'Microsoft.Network/networkInterfaces@2022-05-01' = {
   }
   dependsOn: [
     externalLBName
+    internalLBName
   ]
 }
 
