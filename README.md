@@ -77,25 +77,33 @@ To deploy via Azure Cloud Shell you can connect via the Azure Portal or directly
 - Login into the Azure Cloud Shell
 - Run the following commands in the Azure Cloud:
 
-git https://github.com/AJLab-GH/fortinetCloudBlueprint.git
+```text
+git clone https://github.com/AJLab-GH/fortinetCloudBlueprint.git
+cd fortinetCloudBlueprint
+```
 
 Create a resource group for your deployment
 
+```text
 - az group create --location (location) --name (resourceGroupName)
+```
 
 ![Create Resource Group](https://raw.githubusercontent.com/AJLab-GH/fortinetCloudBlueprint/staging/Images/createRG.png)
 
 Deploy the templates
 
-- az deployment group create --name (deploymentName) --resource-group (resourceGroupName) --template-file 000-main.bicep
-
+```text
+ az deployment group create --name (deploymentName) --resource-group (resourceGroupName) --template-file 000-main.bicep
+```
 The script will ask you a few questions to bootstrap a full deployment.
 
 ![Input Variables](https://raw.githubusercontent.com/AJLab-GH/fortinetCloudBlueprint/staging/Images/ProvideValue.png)
 
 After deployment you can output the important values such as public IP addresses, etc that you'll need to connect to your deployment.
 
-- az deployment group show  -g (resourceGroupName)   -n (deploymentName)  --query properties.outputs
+```text
+az deployment group show  -g (resourceGroupName)   -n (deploymentName)  --query properties.outputs
+```
 
 ![Input Variables](https://raw.githubusercontent.com/AJLab-GH/fortinetCloudBlueprint/staging/Images/Outputs.png)
 
