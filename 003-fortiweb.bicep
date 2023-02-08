@@ -47,7 +47,8 @@ param haSubscriptionId string
 param haTenantId string
 param location string
 param fortinetTags object
-
+param vnetAddressPrefix string
+param subnet7StartAddress string
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                                                                 //
@@ -65,12 +66,33 @@ var var_vnetName = ((vnetName == '') ? '${deploymentPrefix}-VNET' : vnetName)
 var subnet5Id = ((vnetNewOrExisting == 'new') ? resourceId('Microsoft.Network/virtualNetworks/subnets', var_vnetName, subnet5Name) : resourceId(vnetResourceGroup, 'Microsoft.Network/virtualNetworks/subnets', var_vnetName, subnet5Name))
 var subnet6Id = ((vnetNewOrExisting == 'new') ? resourceId('Microsoft.Network/virtualNetworks/subnets', var_vnetName, subnet6Name) : resourceId(vnetResourceGroup, 'Microsoft.Network/virtualNetworks/subnets', var_vnetName, subnet6Name))
 var fwbGlobalDataBody = 'config system settings\n set enable-file-upload enable\n end\nconfig system admin\nedit admin\nset password Q1w2e34567890--\nend\n'
-var fwbACustomDataBodyHA = 'config system ha\n set override enable\n set mode active-active-high-volume\n set group-id ${fortiWebHaGroupId}\n set group-name ${toLower(deploymentPrefix)}\n set priority 1\n set tunnel-local ${sn2IPfwbA}\n set tunnel-peer ${sn2IPfwbA}\n set monitor port1 port2\nend\n'
-var fwbACustomDataBody = '${fwbGlobalDataBody}${fwbACustomDataBodyHA}${fortiWebAAdditionalCustomData}${fortiWebALicenseBYOL}\n'
+var fwbACustomDataBodyHA = 'config system ha\n set override enable\n set mode active-active-high-volume\n set group-id ${fortiWebHaGroupId}\n set group-name ${toLower(deploymentPrefix)}\n set priority 1\n set tunnel-local ${sn2IPfwbA}\n set tunnel-peer ${sn2IPfwbB}\n set monitor port1 port2\nend\n'
+var fwbACustomDataBody = '${fwbGlobalDataBody}${fwbACustomDataBodyHA}${fwbACustomDataPreconfig}${fortiWebAAdditionalCustomData}${fortiWebALicenseBYOL}\n'
 var fwbACustomDataCombined = { 
   'cloud-initd' : 'enable'
   'usr-cli': fwbACustomDataBody
   }
+var fwbACustomDataPreconfig = '${fwbACustomDataVIP}${fwbAStaticRoute}${fwbAVirtualServerPolicy}${fwbAServerPool}${fwbAServerPolicy}'
+var fwbACustomDataVIP = 'config system vip\n edit "DVWA-VIP"\n set vip ${reference(publicIPId).ipAddress}/32\n set interface port1\n set index 1\n next\n end\n'
+var fwbAStaticRoute = 'config router static\n edit 1\n set dst ${vnetAddressPrefix}\n set gateway ${sn2GatewayIP}\n set device port2\n next\n end\n'
+var fwbAVirtualServerPolicy = 'config server-policy vserver\n edit "DVWA-VS"\n config  vip-list\n edit 1\n set vip DVWA-VIP\n next\n end\n next\n end\n'
+var fwbAServerPool = 'config server-policy server-pool\n edit "DVWA-SP"\n config  pserver-list\n edit 1\n set ip ${subnet7StartAddress}\n next\n end\n next\n end\n'
+var fwbAServerPolicy = '''
+config server-policy policy
+  edit "DVWA-Policy"
+    set ssl enable
+    set vserver DVWA-VS
+    set service HTTP
+    set web-protection-profile "Inline Standard Protection"
+    set replacemsg Predefined
+    set server-pool DVWA-SP
+    set https-service HTTPS
+    set ssl-custom-cipher ECDHE-ECDSA-AES256-GCM-SHA384 ECDHE-RSA-AES256-GCM-SHA384 ECDHE-ECDSA-CHACHA20-POLY1305 ECDHE-RSA-CHACHA20-POLY1305 ECDHE-ECDSA-AES128-GCM-SHA256 ECDHE-RSA-AES128-GCM-SHA256 ECDHE-ECDSA-AES256-SHA384 ECDHE-RSA-AES256-SHA384 ECDHE-ECDSA-AES128-SHA256 ECDHE-RSA-AES128-SHA256 ECDHE-ECDSA-AES256-SHA ECDHE-RSA-AES256-SHA ECDHE-ECDSA-AES128-SHA ECDHE-RSA-AES128-SHA AES256-GCM-SHA384 AES128-GCM-SHA256 AES256-SHA256 AES128-SHA256 
+    config  http-content-routing-list
+    end
+  next
+end
+'''
 
 var fwbACustomData = base64(string(fwbACustomDataCombined))
 var fwbBCustomDataBodyHA = 'config system ha\n set override enable\n set mode active-active-high-volume\n set group-id ${fortiWebHaGroupId}\n set group-name ${toLower(deploymentPrefix)}\n set priority 2\n set tunnel-local ${sn2IPfwbB}\n set tunnel-peer ${sn2IPfwbA}\n set monitor port1 port2\nend\n'
@@ -135,12 +157,16 @@ var sn1IPArray0 = string(int(sn1IPArray[0]))
 var sn1IPStartAddress = split(subnet5StartAddress, '.')
 var sn1IPfwbA = '${sn1IPArray0}.${sn1IPArray1}.${sn1IPArray2}.${int(sn1IPStartAddress[3])}'
 var sn1IPfwbB = '${sn1IPArray0}.${sn1IPArray1}.${sn1IPArray2}.${(int(sn1IPStartAddress[3]) + 1)}'
-var sn1IPlb = '${sn1IPArray0}.${sn1IPArray1}.${sn1IPArray2}.${(int(sn1IPStartAddress[3]) + 2)}'
+var sn1IPlb = '${sn1IPArray0}.${sn1IPArray1}.${sn1IPArray2}.${(int(sn1IPStartAddress[3]) - 1)}'
 var sn2IPArray = split(subnet6Prefix, '.')
 var sn2IPArray2 = string(int(sn2IPArray[2]))
 var sn2IPArray1 = string(int(sn2IPArray[1]))
 var sn2IPArray0 = string(int(sn2IPArray[0]))
 var sn2IPStartAddress = split(subnet6StartAddress, '.')
+var sn2GatewayIP = '${sn2IPArray0}.${sn2IPArray1}.${sn2IPArray2}.${sn2IPArray3}'
+var sn2IPArray3 = string((int(sn2IPArray2nd[0]) + 1))
+var sn2IPArray2nd = split(sn2IPArray2ndString, '/')
+var sn2IPArray2ndString = string(sn2IPArray[3])
 var sn2IPfwbA = '${sn2IPArray0}.${sn2IPArray1}.${sn2IPArray2}.${(int(sn2IPStartAddress[3]) + 1)}'
 var sn2IPfwbB = '${sn2IPArray0}.${sn2IPArray1}.${sn2IPArray2}.${(int(sn2IPStartAddress[3]) + 2)}'
 var externalLBName_NatRule_FWBAdminPerm_fwbA = '${var_fwbAVmName}FWBAdminPerm'
