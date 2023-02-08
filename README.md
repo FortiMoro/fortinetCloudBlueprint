@@ -29,9 +29,9 @@ This set of Bicep templates deploys:
 
 ## Design
 
-This FortiGate setup will receive non-http(s) traffic using user defined routing (UDR) and public IPs. You can send all or specific traffic that needs inspection, going to/coming from on-prem networks or public internet by adapting the UDR routing.
+This FortiGate setup will receive non-http(s) traffic using user defined routing (UDR) and public IPs. You can send all or specific traffic that needs inspection, going to/coming from on-prem networks or public internet by adapting the UDR routing. Here is an example of [Internet originating Non-HTTP(S) flows (i.e SSH etc)](doc/InternetNonHTTP.md)
 
-This FortiWeb setup will only receive http(s) traffic using user defined routing (UDR) and public IPs. You can send all or specific http(s) traffic that needs inspection, going to/coming from on-prem networks or public internet by adapting the UDR routing.
+This FortiWeb setup will only receive http(s) traffic using user defined routing (UDR) and public IPs. You can send all or specific http(s) traffic that needs inspection, going to/coming from on-prem networks or public internet by adapting the UDR routing. Here is an example of [Internet originating HTTP(S) flows ](doc/InternetHTTP.md)
 
 This Azure BICEP template will automatically deploy a full working environment containing the the following components.
 
