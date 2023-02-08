@@ -161,7 +161,7 @@ param subnet6Name string = 'FWBInternal'
 param subnet6Prefix string = '10.0.6.0/24'
 
 @description('Subnet 6 start address, 2 consecutive private IPs are required')
-param subnet6StartAddress string = '10.0.6.5'
+param subnet6StartAddress string = '10.0.6.4'
 
 @description('Subnet 7 Name')
 param subnet7Name string = 'DMZProtectedA'
