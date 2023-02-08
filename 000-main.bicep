@@ -134,7 +134,7 @@ param subnet3Name string = 'FGHA'
 param subnet3Prefix string = '10.0.3.0/24'
 
 @description('Subnet 3 start address, 2 consecutive private IPs are required')
-param subnet3StartAddress string = '10.0.3.4'
+param subnet3StartAddress string = '10.0.3.5'
 
 @description('Subnet 4 Name')
 param subnet4Name string = 'FGMgmt'
@@ -143,7 +143,7 @@ param subnet4Name string = 'FGMgmt'
 param subnet4Prefix string = '10.0.4.0/24'
 
 @description('Subnet 4 start address, 2 consecutive private IPs are required')
-param subnet4StartAddress string = '10.0.4.4'
+param subnet4StartAddress string = '10.0.4.5'
 
 @description('Subnet 5 Name')
 param subnet5Name string = 'FWBExternal'
@@ -152,7 +152,7 @@ param subnet5Name string = 'FWBExternal'
 param subnet5Prefix string = '10.0.5.0/24'
 
 @description('Subnet 5 start address, 3 consecutive private IPs are required')
-param subnet5StartAddress string = '10.0.5.4'
+param subnet5StartAddress string = '10.0.5.5'
 
 @description('Subnet 6 Name')
 param subnet6Name string = 'FWBInternal'
@@ -161,7 +161,7 @@ param subnet6Name string = 'FWBInternal'
 param subnet6Prefix string = '10.0.6.0/24'
 
 @description('Subnet 6 start address, 2 consecutive private IPs are required')
-param subnet6StartAddress string = '10.0.6.4'
+param subnet6StartAddress string = '10.0.6.5'
 
 @description('Subnet 7 Name')
 param subnet7Name string = 'DMZProtectedA'
@@ -170,7 +170,7 @@ param subnet7Name string = 'DMZProtectedA'
 param subnet7Prefix string = '10.0.10.0/24'   
 
 @description('Subnet 7 start address, 1 consecutive private IPs are required')
-param subnet7StartAddress string = '10.0.10.4'
+param subnet7StartAddress string = '10.0.10.7'
 
 @description('Define the IP address range of your on-premise x.x.x.x/x')
 param onPremRange string = '172.16.0.0/16'
@@ -652,9 +652,9 @@ module dvwaTemplate '004-dvwa.bicep' = if (deployDVWA == 'yes') {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 output dvwaSSH string = '${fortiGateTemplate.outputs.fortiGatePublicIP}:22'
-output dvwaHTTP string = '${fortiWebTemplate.outputs.fortiWebPublicIP}:80'
+output dvwaHTTP string = 'http://${fortiWebTemplate.outputs.fortiWebPublicIP}:80'
 output fortiGateAManagementConsole string = 'https://${fortiGateTemplate.outputs.fortiGateAManagementPublicIP}:443'
 output fortiGateBManagementConsole string = 'https://${fortiGateTemplate.outputs.fortiGateBManagementPublicIP}:443'
 output fortiWebAManagementConsole string = 'https://${fortiWebTemplate.outputs.fortiWebPublicIP}:40030'
 output fortiWebBManagementConsole string = 'https://${fortiWebTemplate.outputs.fortiWebPublicIP}:40031'
-output fwbACustomData string = fortiWebTemplate.outputs.fwbACustomData
+
