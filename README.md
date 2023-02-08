@@ -85,7 +85,7 @@ cd fortinetCloudBlueprint
 Create a resource group for your deployment
 
 ```text
-- az group create --location (location) --name (resourceGroupName)
+ az group create --location (location) --name (resourceGroupName)
 ```
 
 ![Create Resource Group](https://raw.githubusercontent.com/AJLab-GH/fortinetCloudBlueprint/staging/Images/createRG.png)
