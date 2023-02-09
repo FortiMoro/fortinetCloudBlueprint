@@ -47,13 +47,9 @@ var sn7IPUbuntu = '${sn7IPArray0}.${sn7IPArray1}.${sn7IPArray2}.${int(sn7IPStart
 var vmCustomDataBody = '''
 #!/bin/bash
 exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
-#Wait for Internet access through the FGT
-while ! ping -c 1 -n -w 1 www.google.com &> /dev/null
-do continue
-done
 dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 dnf remove podman buildah
-dnf install docker-ce docker-ce-cli containerd.io
+dnf -y install docker-ce docker-ce-cli containerd.io
 systemctl start docker.service
 systemctl enable docker.service
 #install docker container

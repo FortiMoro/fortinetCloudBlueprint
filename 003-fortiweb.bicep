@@ -17,7 +17,6 @@ param adminPassword string
 param deploymentPrefix string
 param fortiWebImageSKU string
 param fortiWebImageVersion string
-param fortiWebHaOverride string
 param fortiWebHaGroupId int
 param fortiWebAAdditionalCustomData string
 param fortiWebBAdditionalCustomData string
@@ -39,12 +38,7 @@ param subnet6Prefix string
 param subnet6StartAddress string
 param fwbserialConsole string
 param fortiWebALicenseBYOL string
-param fortiWebBLicenseBYOL string
-param haAppId string
 @secure()
-param haAppSecret string
-param haSubscriptionId string
-param haTenantId string
 param location string
 param fortinetTags object
 param vnetAddressPrefix string
@@ -100,22 +94,6 @@ var fwbBCustomDataBody = '${fwbGlobalDataBody}${fwbBCustomDataBodyHA}${fortiWebB
 var fwbbCustomDataCombined = { 
   'cloud-initd': 'enable'
   'usr-cli': fwbBCustomDataBody
-  HaAzureInit: 'enable'
-  HaResourceGroupName: resourceGroup().name
-  HaSubscriptionId: haSubscriptionId
-  HaTenantId: haTenantId
-  HaApplicationId: haAppId
-  HaApplicationPassword: haAppSecret
-  HaLoadblancerName: var_externalLBName
-  HaInstanceCount: '2'
-  HaInstanceId: '2'
-  HaNamePrefix: deploymentPrefix
-  HaInstanceName: var_fwbBVmName
-  HaMode: 'active-active-high-volume'
-  HaGroupId: fortiWebHaGroupId
-  HaGroupName: toLower(deploymentPrefix)
-  HaOverride: fortiWebHaOverride
-  FwbLicenseBYOL: fortiWebBLicenseBYOL
 }
 var fwbBCustomData = base64(string(fwbbCustomDataCombined))
 var var_fwbAVmName = '${deploymentPrefix}-FWB-A'

@@ -406,13 +406,6 @@ param fortiWebImageSKU string = 'fortinet_fw-vm_payg_v2'
 ])
 param fortiWebImageVersion string = 'latest'
 
-@description('HA Override')
-@allowed([
-  'enable'
-  'disable'
-])
-param fortiWebHaOverride string = 'disable'
-
 @description('Type a group id that identifies of HA cluster. Mininum is 0, Maximum is 63.')
 @minValue(0)
 @maxValue(63)
@@ -454,22 +447,6 @@ param fwbserialConsole string = 'yes'
 
 @description('FortiWeb BYOL license content')
 param fortiWebALicenseBYOL string = ''
-
-@description('FortiWeb BYOL license content')
-param fortiWebBLicenseBYOL string = ''
-
-@description('Active/Active config - Azure Service Principal Application Id')
-param haAppId string = ''
-
-@description('Active/Active config - Azure Service Principal Application Secret')
-@secure()
-param haAppSecret string = ''
-
-@description('Active/Active config - Azure Service Principal Subscription Id')
-param haSubscriptionId string = ''
-
-@description('Active/Active config - Azure Service Principal Tenant Id')
-param haTenantId string = ''
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                                                                 //
@@ -580,6 +557,8 @@ module fortiGateTemplate '002-fortigate.bicep' = {
 module fortiWebTemplate '003-fortiweb.bicep' = if (deployFortiWeb == 'yes') {
   name: 'fortiwebDeployment'
   params: {
+    subnet7StartAddress: subnet7StartAddress
+    vnetAddressPrefix: vnetAddressPrefix
     acceleratedNetworking: acceleratedNetworking
     adminPassword: adminPassword
     adminUsername: adminUsername
@@ -589,16 +568,10 @@ module fortiWebTemplate '003-fortiweb.bicep' = if (deployFortiWeb == 'yes') {
     fortiWebAAdditionalCustomData:fortiWebAAdditionalCustomData
     fortiWebALicenseBYOL: fortiWebALicenseBYOL
     fortiWebBAdditionalCustomData:fortiWebBAdditionalCustomData
-    fortiWebBLicenseBYOL: fortiWebBLicenseBYOL
     fortiWebHaGroupId: fortiWebHaGroupId
-    fortiWebHaOverride: fortiWebHaOverride
     fortiWebImageSKU: fortiWebImageSKU
     fortiWebImageVersion: fortiWebImageVersion
     fwbserialConsole: fwbserialConsole
-    haAppId: haAppId
-    haAppSecret: haAppSecret
-    haSubscriptionId: haSubscriptionId
-    haTenantId: haTenantId
     instanceType: instanceType
     location: location
     publicIPName: publicIPName
