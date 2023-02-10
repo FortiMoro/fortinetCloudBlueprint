@@ -47,6 +47,8 @@ var sn7IPUbuntu = '${sn7IPArray0}.${sn7IPArray1}.${sn7IPArray2}.${int(sn7IPStart
 var vmCustomDataBody = '''
 #!/bin/bash
 exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+#Wait for Internet access through the FGT
+curl --retry 20 -s -o /dev/null "http://google.com"
 dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 dnf remove podman buildah
 dnf -y install docker-ce docker-ce-cli containerd.io
