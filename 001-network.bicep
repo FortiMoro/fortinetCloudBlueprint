@@ -162,4 +162,3 @@ resource vnetName_resource 'Microsoft.Network/virtualNetworks@2020-04-01' = if (
   }
 
 
-
