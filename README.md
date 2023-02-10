@@ -60,16 +60,6 @@ The solution can be deployed using the Azure Portal or Azure CLI. There are 3 va
 ## Making modifications to the template
 
 If you do not wish to use the OOTB values for your deployment, changes can be made to the "000-main.bicep" file. This file is the ONLY file where values can be changed or modified. Changes to the modules will be inherited from the Main File.
-
-### Azure Portal
-
-Azure Portal Wizard:
-[![Deploy Azure Portal Button](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2F40net-cloud%2Ffortinet-azure-solutions%2Fmain%2FFortiGate%2FActive-Active-ELB-ILB%2Fazuredeploy.json/createUIDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2F40net-cloud%2Ffortinet-azure-solutions%2Fmain%2FFortiGate%2FActive-Active-ELB-ILB%2FcreateUiDefinition.json)
-
-Custom deployment:
-[![Deploy Azure Portal Button](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2F40net-cloud%2Ffortinet-azure-solutions%2Fmain%2FFortiGate%2FActive-Active-ELB-ILB%2Fazuredeploy.json)
-
-
 ### Azure CLI
 
 To deploy via Azure Cloud Shell you can connect via the Azure Portal or directly to [https://shell.azure.com/](https://shell.azure.com/).
@@ -78,6 +68,7 @@ To deploy via Azure Cloud Shell you can connect via the Azure Portal or directly
 - Run the following commands in the Azure Cloud:
 
 ```text
+az bicep upgrade
 git clone https://github.com/AJLab-GH/fortinetCloudBlueprint.git
 cd fortinetCloudBlueprint
 ```
