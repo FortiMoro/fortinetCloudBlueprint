@@ -16,13 +16,6 @@
 //  to jump to Modules Portion "CTRL + F" for 131415                                                                               //
 //  to jump to Outputs Portion "CTRL + F" for 161718                                                                               //
 //                                                                                                                                 //
-//  Deployment Commands for Alex's PoC <----Remove:                                                                                //
-//  az group create --location CanadaCentral --name AJLab-BlPrt-RG                                                                 //
-//  az deployment group create --name fortinetCloudBlueprint --resource-group AJLab-BlPrt-RG --template-file 000-main.bicep        //
-//  az deployment group show  -g AJLab-BlPrt-RG   -n fortinetCloudBlueprint  --query properties.outputs                            //
-//                                                                                                                                 //
-//   SET fortiGateVMSKU back to BYOL                                                                                               //
-//   SET fortiWebVMSKU back to BYOL                                                                                                //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
