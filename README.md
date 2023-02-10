@@ -98,6 +98,12 @@ az deployment group show  -g (resourceGroupName)   -n (deploymentName)  --query 
 
 ![Input Variables](https://raw.githubusercontent.com/AJLab-GH/fortinetCloudBlueprint/staging/Images/Outputs.png)
 
+## Deleting the Deployments
+
+```text
+az deployment group delete  -g (resourceGroupName)   -n (deploymentName)
+```
+
 ## Requirements and limitations
 
 The Bicep template deploys different resources and it is required to have the access rights and quota in your Microsoft Azure subscription to deploy the resources.
