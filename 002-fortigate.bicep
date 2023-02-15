@@ -89,8 +89,6 @@ var fgaCustomDataCombined = '${customDataHeader}${fgaCustomDataBody}${customData
 var fgbCustomDataCombined = '${customDataHeader}${fgbCustomDataBody}${customDataLicenseHeader}${fortiGateLicenseBYOLB}${customDataFooter}'
 var fgaCustomData = base64(((fortiGateLicenseBYOLA == '') ? fgaCustomDataBody : fgaCustomDataCombined))
 var fgbCustomData = base64(((fortiGateLicenseBYOLB == '') ? fgbCustomDataBody : fgbCustomDataCombined))
-
-////
 var fortiGateVIPConfig = '\nconfig firewall vip\nedit "Ubuntu-SSH-VIP"\nset extip ${publicIP1Name_resource.properties.ipAddress}\nset mappedip "${subnet7StartAddress}"\nset extintf "any"\nset portforward enable\nset extport 2222\nset mappedport 22\nnext\nend\n'
 var fortiGateIPv4Policy = '''
 config firewall policy
@@ -117,7 +115,6 @@ config firewall policy
     next
 end
 '''
-////
 var var_fgaNic1Name = '${var_fgaVmName}-Nic1'
 var fgaNic1Id = fgaNic1Name.id
 var var_fgaNic2Name = '${var_fgaVmName}-Nic2'

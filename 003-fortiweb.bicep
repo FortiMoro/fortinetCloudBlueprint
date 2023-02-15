@@ -67,7 +67,7 @@ var fwbACustomDataCombined = {
   'usr-cli': fwbACustomDataBody
   }
 var fwbACustomDataPreconfig = '${fwbACustomDataVIP}${fwbAStaticRoute}${fwbAVirtualServerPolicy}${fwbAServerPool}${fwbAServerPolicy}'
-var fwbACustomDataVIP = 'config system vip\n edit "DVWA-VIP"\n set vip ${reference(publicIPId).ipAddress}/32\n set interface port1\n set index 1\n next\n end\n'
+var fwbACustomDataVIP = 'config system vip\n edit "DVWA-VIP"\n set vip ${reference(publicIPId).ipAddress}/32\n set interface port1\n next\n end\n'
 var fwbAStaticRoute = 'config router static\n edit 1\n set dst ${vnetAddressPrefix}\n set gateway ${sn2GatewayIP}\n set device port2\n next\n end\n'
 var fwbAVirtualServerPolicy = 'config server-policy vserver\n edit "DVWA-VS"\n config  vip-list\n edit 1\n set vip DVWA-VIP\n next\n end\n next\n end\n'
 var fwbAServerPool = 'config server-policy server-pool\n edit "DVWA-SP"\n config  pserver-list\n edit 1\n set ip ${subnet7StartAddress}\n next\n end\n next\n end\n'
@@ -820,6 +820,7 @@ resource fwbBVmName 'Microsoft.Compute/virtualMachines@2022-08-01' = {
 output fortiWebPublicIP string = ((publicIPNewOrExistingOrNone == 'new') ? reference(publicIPId).ipAddress : '')
 output fwbACustomData string = fwbACustomData
 output fwbBCustomData string = fwbBCustomData
+output fwbACustomDataPreconfig string = fwbACustomDataPreconfig
 
 
 
