@@ -37,7 +37,6 @@ param subnet6Name string
 param subnet6Prefix string
 param subnet6StartAddress string
 param fwbserialConsole string
-param fortiWebALicenseBYOL string
 @secure()
 param location string
 param fortinetTags object
@@ -60,42 +59,31 @@ var var_vnetName = ((vnetName == '') ? '${deploymentPrefix}-VNET' : vnetName)
 var subnet5Id = ((vnetNewOrExisting == 'new') ? resourceId('Microsoft.Network/virtualNetworks/subnets', var_vnetName, subnet5Name) : resourceId(vnetResourceGroup, 'Microsoft.Network/virtualNetworks/subnets', var_vnetName, subnet5Name))
 var subnet6Id = ((vnetNewOrExisting == 'new') ? resourceId('Microsoft.Network/virtualNetworks/subnets', var_vnetName, subnet6Name) : resourceId(vnetResourceGroup, 'Microsoft.Network/virtualNetworks/subnets', var_vnetName, subnet6Name))
 var fwbGlobalDataBody = 'config system settings\n set enable-file-upload enable\n end\nconfig system admin\nedit admin\nset password Q1w2e34567890--\nend\n'
-var fwbACustomDataBodyHA = 'config system ha\n set override enable\n set mode active-active-high-volume\n set group-id ${fortiWebHaGroupId}\n set group-name ${toLower(deploymentPrefix)}\n set priority 1\n set tunnel-local ${sn2IPfwbA}\n set tunnel-peer ${sn2IPfwbB}\n set monitor port1 port2\nend\n'
-var fwbACustomDataBody = '${fwbGlobalDataBody}${fwbACustomDataBodyHA}${fwbACustomDataPreconfig}${fortiWebAAdditionalCustomData}${fortiWebALicenseBYOL}\n'
+var fwbACustomDataBodyHA = 'config system ha\n set override enable\n set mode active-active-high-volume\n set group-id ${fortiWebHaGroupId}\n set group-name ${toLower(deploymentPrefix)}\n set priority 1\n set tunnel-local ${sn2IPfwbA}\n set tunnel-peer ${sn2IPfwbB}\n set monitor port1 port2\nend\n\n'
+var fwbACustomDataBody = '${fwbGlobalDataBody}${fwbACustomDataBodyHA}${fwbACustomDataPreconfig}${fortiWebAAdditionalCustomData}\n'
 var fwbACustomDataCombined = { 
   'cloud-initd' : 'enable'
   'usr-cli': fwbACustomDataBody
   }
-var fwbACustomDataPreconfig = '${fwbACustomDataVIP}${fwbAStaticRoute}${fwbAVirtualServerPolicy}${fwbAServerPool}${fwbAServerPolicy}'
-var fwbACustomDataVIP = 'config system vip\n edit "DVWA-VIP"\n set vip ${reference(publicIPId).ipAddress}/32\n set interface port1\n next\n end\n'
-var fwbAStaticRoute = 'config router static\n edit 1\n set dst ${vnetAddressPrefix}\n set gateway ${sn2GatewayIP}\n set device port2\n next\n end\n'
-var fwbAVirtualServerPolicy = 'config server-policy vserver\n edit "DVWA-VS"\n config  vip-list\n edit 1\n set vip DVWA-VIP\n next\n end\n next\n end\n'
-var fwbAServerPool = 'config server-policy server-pool\n edit "DVWA-SP"\n config  pserver-list\n edit 1\n set ip ${subnet7StartAddress}\n next\n end\n next\n end\n'
-var fwbAServerPolicy = '''
-config server-policy policy
-  edit "DVWA-Policy"
-    set ssl enable
-    set vserver DVWA-VS
-    set service HTTP
-    set web-protection-profile "Inline Standard Protection"
-    set replacemsg Predefined
-    set server-pool DVWA-SP
-    set https-service HTTPS
-    set ssl-custom-cipher ECDHE-ECDSA-AES256-GCM-SHA384 ECDHE-RSA-AES256-GCM-SHA384 ECDHE-ECDSA-CHACHA20-POLY1305 ECDHE-RSA-CHACHA20-POLY1305 ECDHE-ECDSA-AES128-GCM-SHA256 ECDHE-RSA-AES128-GCM-SHA256 ECDHE-ECDSA-AES256-SHA384 ECDHE-RSA-AES256-SHA384 ECDHE-ECDSA-AES128-SHA256 ECDHE-RSA-AES128-SHA256 ECDHE-ECDSA-AES256-SHA ECDHE-RSA-AES256-SHA ECDHE-ECDSA-AES128-SHA ECDHE-RSA-AES128-SHA AES256-GCM-SHA384 AES128-GCM-SHA256 AES256-SHA256 AES128-SHA256 
-    config  http-content-routing-list
-    end
-  next
-end
-'''
+var fwbACustomDataPreconfig = '${fwbCustomDataVIP}${fwbStaticRoute}${fwbServerPool}${configFortiGateIntegrationA}${letsEncrypt}${wvsProfile}${bulkPoCConfig}'
+var fwbCustomDataVIP = '\nconfig system vip\n edit "DVWA-VIP"\n set vip ${reference(publicIPId).ipAddress}/32\n set interface port1\n next\n end\n'
+var fwbStaticRoute = '\nconfig router static\n edit 1\n set dst ${vnetAddressPrefix}\n set gateway ${sn2GatewayIP}\n set device port2\n next\n end\n'
+var fwbServerPool = '\nconfig server-policy server-pool\n edit "DVWA_POOL"\n config pserver-list\n edit 1\n set ip ${subnet7StartAddress}\n next\n end\n next\n end\n'
+var configFortiGateIntegrationA = '\nconfig system fortigate-integration\nset address ${sn2IPfwbA}\nset port 443\nset protocol HTTPS\nset username admin\nset password ${adminPassword}\nset flag enable\nend\n'
+var letsEncrypt = '\nconfig system certificate letsencrypt\nedit "DVWA_LE_CERTIFICATE"\nset domain ${deploymentPrefix}.${location}.cloudapp.azure.com\nset validation-method TLS-ALPN\nnext\nend\n'
+var wvsProfile = '\nconfig wvs profile\nedit "DVWASCANPROFILE"\nset scan-target https://${sn1IPfwbA}\nset scan-template "OWASP Top 10"\nset custom-header0 "Cookie: security=low; PHPSESSID=XXXXXXXXXXXXXXXXXXXX"\nset form-based-authentication enable\nset form-based-username pablo\nset form-based-password letmein\nset form-based-auth-url https://${sn1IPfwbA}/login.php\nset username-field username\nset password-field password\nset session-check-url https://10.0.5.5/index.php\nset session-check-string Welcome\nset data-format %u=%U&%p=%P\nnext\nend\n'
+var bulkPoCConfig = loadTextContent('004-fortiwebCustomData.txt')
 
 var fwbACustomData = base64(string(fwbACustomDataCombined))
 var fwbBCustomDataBodyHA = 'config system ha\n set override enable\n set mode active-active-high-volume\n set group-id ${fortiWebHaGroupId}\n set group-name ${toLower(deploymentPrefix)}\n set priority 2\n set tunnel-local ${sn2IPfwbB}\n set tunnel-peer ${sn2IPfwbA}\n set monitor port1 port2\nend\n'
-var fwbBCustomDataBody = '${fwbGlobalDataBody}${fwbBCustomDataBodyHA}${fortiWebBAdditionalCustomData}\n'
+var fwbBCustomDataBody = '${fwbGlobalDataBody}${fwbBCustomDataBodyHA}${fwbBCustomDataPreconfig}${fortiWebBAdditionalCustomData}'
+var fwbBCustomDataPreconfig = '${fwbCustomDataVIP}${fwbStaticRoute}${fwbServerPool}${configFortiGateIntegrationB}${letsEncrypt}${bulkPoCConfig}\n'
 var fwbbCustomDataCombined = { 
   'cloud-initd': 'enable'
   'usr-cli': fwbBCustomDataBody
 }
 var fwbBCustomData = base64(string(fwbbCustomDataCombined))
+var configFortiGateIntegrationB = '\nconfig system fortigate-integration\nset address ${sn2IPfwbB}\nset port 443\nset protocol HTTPS\nset username admin\nset password ${adminPassword}\nset flag enable\nend\n'
 var var_fwbAVmName = '${deploymentPrefix}-FWB-A'
 var var_fwbBVmName = '${deploymentPrefix}-FWB-B'
 var var_fwbANic1Name = '${var_fwbAVmName}-Nic1'
@@ -330,6 +318,9 @@ resource publicIPName_resource 'Microsoft.Network/publicIPAddresses@2022-05-01' 
   }
   properties: {
     publicIPAllocationMethod: publicIPType
+    dnsSettings: {
+      domainNameLabel: toLower(deploymentPrefix)
+    }
   }
 }
 

@@ -995,3 +995,4 @@ output fortiGateAManagementPublicIP string = ((publicIP2NewOrExisting == 'new') 
 output fortiGateBManagementPublicIP string = ((publicIP3NewOrExisting == 'new') ? reference(publicIP3Id).ipAddress : '')
 output externalLBFEName string = externalLBFEName
 
+
