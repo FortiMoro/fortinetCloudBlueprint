@@ -438,9 +438,6 @@ param publicIPType string = 'Static'
 ])
 param fwbserialConsole string = 'yes'
 
-@description('FortiWeb BYOL license content')
-param fortiWebALicenseBYOL string = ''
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                                                                 //
 //                                                                                                                                 //
@@ -559,7 +556,6 @@ module fortiWebTemplate '003-fortiweb.bicep' = if (deployFortiWeb == 'yes') {
     deploymentPrefix: deploymentPrefix
     fortinetTags: fortinetTags
     fortiWebAAdditionalCustomData:fortiWebAAdditionalCustomData
-    fortiWebALicenseBYOL: fortiWebALicenseBYOL
     fortiWebBAdditionalCustomData:fortiWebBAdditionalCustomData
     fortiWebHaGroupId: fortiWebHaGroupId
     fortiWebImageSKU: fortiWebImageSKU
