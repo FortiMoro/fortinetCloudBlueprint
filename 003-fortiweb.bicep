@@ -66,7 +66,7 @@ var fwbACustomDataCombined = {
   'usr-cli': fwbACustomDataBody
   }
 var fwbACustomDataPreconfig = '${fwbCustomDataVIP}${fwbStaticRoute}${fwbServerPool}${configFortiGateIntegrationA}${letsEncrypt}${wvsProfile}${bulkPoCConfig}'
-var fwbCustomDataVIP = '\nconfig system vip\n edit "DVWA-VIP"\n set vip ${reference(publicIPId).ipAddress}/32\n set interface port1\n next\n end\n'
+var fwbCustomDataVIP = '\nconfig system vip\n edit "DVWA_VIP"\n set vip ${reference(publicIPId).ipAddress}/32\n set interface port1\n next\n end\n'
 var fwbStaticRoute = '\nconfig router static\n edit 1\n set dst ${vnetAddressPrefix}\n set gateway ${sn2GatewayIP}\n set device port2\n next\n end\n'
 var fwbServerPool = '\nconfig server-policy server-pool\n edit "DVWA_POOL"\n config pserver-list\n edit 1\n set ip ${subnet7StartAddress}\n next\n end\n next\n end\n'
 var configFortiGateIntegrationA = '\nconfig system fortigate-integration\nset address ${sn2IPfwbA}\nset port 443\nset protocol HTTPS\nset username admin\nset password ${adminPassword}\nset flag enable\nend\n'
