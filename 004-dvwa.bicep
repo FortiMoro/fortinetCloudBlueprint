@@ -47,13 +47,17 @@ var sn7IPUbuntu = '${sn7IPArray0}.${sn7IPArray1}.${sn7IPArray2}.${int(sn7IPStart
 var vmCustomDataBody = '''
 #!/bin/bash
 exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
-#Wait for Internet access through the FGT by testing the docker regsitry
-curl --retry 20 -s -o /dev/null "https://index.docker.io/v2/"
+#Wait for the repo 
+echo "Waiting for repo to be reacheable"
+curl --retry 20 -s -o /dev/null "https://download.docker.com/linux/centos/docker-ce.repo"
 dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 dnf remove podman buildah
 dnf -y install docker-ce docker-ce-cli containerd.io
 systemctl start docker.service
 systemctl enable docker.service
+#Wait for Internet access through the FGT by testing the docker regsitry
+echo "Waiting for docker registry to be reacheable"
+curl --retry 20 -s -o /dev/null "https://index.docker.io/v2/"
 #install docker container
 until docker run --restart=always --name dvwa -d -p 80:80 vulnerables/web-dvwa
 do
@@ -61,6 +65,7 @@ do
     sleep 2
 done
 '''
+
 var vmCustomData = base64(vmCustomDataBody)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
