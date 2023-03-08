@@ -778,7 +778,7 @@ resource fgaNic4Name 'Microsoft.Network/networkInterfaces@2020-04-01' = {
         properties: {
           privateIPAllocationMethod: 'Static'
           privateIPAddress: sn4IPfga
-          publicIPAddress: ((publicIP2NewOrExisting != 'none') ? publicIPAddress2Id : json('null'))
+          publicIPAddress: ((publicIP2NewOrExisting != 'none') ? publicIPAddress2Id : null)
           subnet: {
             id: subnet4Id
           }
@@ -806,7 +806,7 @@ resource fgbNic4Name 'Microsoft.Network/networkInterfaces@2020-04-01' = {
         properties: {
           privateIPAllocationMethod: 'Static'
           privateIPAddress: sn4IPfgb
-          publicIPAddress: ((publicIP3NewOrExisting != 'none') ? publicIPAddress3Id : json('null'))
+          publicIPAddress: ((publicIP3NewOrExisting != 'none') ? publicIPAddress3Id : null)
           subnet: {
             id: subnet4Id
           }
@@ -830,7 +830,7 @@ resource fgaVmName 'Microsoft.Compute/virtualMachines@2021-07-01' = {
   identity: {
     type: 'SystemAssigned'
   }
-  zones: (useAZ ? zone1 : json('null'))
+  zones: (useAZ ? zone1 : null)
   plan: {
     name: fortiGateImageSKU
     publisher: imagePublisher
@@ -840,7 +840,7 @@ resource fgaVmName 'Microsoft.Compute/virtualMachines@2021-07-01' = {
     hardwareProfile: {
       vmSize: instanceType
     }
-    availabilitySet: ((!useAZ) ? availabilitySetId : json('null'))
+    availabilitySet: ((!useAZ) ? availabilitySetId : null)
     osProfile: {
       computerName: var_fgaVmName
       adminUsername: adminUsername
@@ -896,7 +896,7 @@ resource fgaVmName 'Microsoft.Compute/virtualMachines@2021-07-01' = {
     diagnosticsProfile: {
       bootDiagnostics: {
         enabled: serialConsoleEnabled
-        storageUri: ((fgtserialConsole == 'yes') ? reference(var_serialConsoleStorageAccountName, '2021-08-01').primaryEndpoints.blob : json('null'))
+        storageUri: ((fgtserialConsole == 'yes') ? reference(var_serialConsoleStorageAccountName, '2021-08-01').primaryEndpoints.blob : null)
       }
     }
   }
@@ -911,7 +911,7 @@ resource fgbVmName 'Microsoft.Compute/virtualMachines@2021-07-01' = {
   identity: {
     type: 'SystemAssigned'
   }
-  zones: (useAZ ? zone2 : json('null'))
+  zones: (useAZ ? zone2 : null)
   plan: {
     name: fortiGateImageSKU
     publisher: imagePublisher
@@ -921,7 +921,7 @@ resource fgbVmName 'Microsoft.Compute/virtualMachines@2021-07-01' = {
     hardwareProfile: {
       vmSize: instanceType
     }
-    availabilitySet: ((!useAZ) ? availabilitySetId : json('null'))
+    availabilitySet: ((!useAZ) ? availabilitySetId : null)
     osProfile: {
       computerName: var_fgbVmName
       adminUsername: adminUsername
@@ -977,7 +977,7 @@ resource fgbVmName 'Microsoft.Compute/virtualMachines@2021-07-01' = {
     diagnosticsProfile: {
       bootDiagnostics: {
         enabled: serialConsoleEnabled
-        storageUri: ((fgtserialConsole == 'yes') ? reference(var_serialConsoleStorageAccountName, '2021-08-01').primaryEndpoints.blob : json('null'))
+        storageUri: ((fgtserialConsole == 'yes') ? reference(var_serialConsoleStorageAccountName, '2021-08-01').primaryEndpoints.blob : null)
       }
     }
   }

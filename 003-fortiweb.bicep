@@ -673,7 +673,7 @@ resource fwbAVmName 'Microsoft.Compute/virtualMachines@2022-08-01' = {
   identity: {
     type: 'SystemAssigned'
   }
-  zones: (useAZ ? zone1 : json('null'))
+  zones: (useAZ ? zone1 : null)
   plan: {
     name: fortiWebImageSKU
     publisher: imagePublisher
@@ -683,7 +683,7 @@ resource fwbAVmName 'Microsoft.Compute/virtualMachines@2022-08-01' = {
     hardwareProfile: {
       vmSize: instanceType
     }
-    availabilitySet: ((!useAZ) ? availabilitySetId : json('null'))
+    availabilitySet: ((!useAZ) ? availabilitySetId : null)
     osProfile: {
       computerName: var_fwbAVmName
       adminUsername: adminUsername
@@ -727,7 +727,7 @@ resource fwbAVmName 'Microsoft.Compute/virtualMachines@2022-08-01' = {
     diagnosticsProfile: {
       bootDiagnostics: {
         enabled: serialConsoleEnabled
-        storageUri: ((fwbserialConsole == 'yes') ? reference(var_serialConsoleStorageAccountName, '2021-08-01').primaryEndpoints.blob : json('null'))
+        storageUri: ((fwbserialConsole == 'yes') ? reference(var_serialConsoleStorageAccountName, '2021-08-01').primaryEndpoints.blob : null)
       }
     }
   }
@@ -742,7 +742,7 @@ resource fwbBVmName 'Microsoft.Compute/virtualMachines@2022-08-01' = {
   identity: {
     type: 'SystemAssigned'
   }
-  zones: (useAZ ? zone2 : json('null'))
+  zones: (useAZ ? zone2 : null)
   plan: {
     name: fortiWebImageSKU
     publisher: imagePublisher
@@ -752,7 +752,7 @@ resource fwbBVmName 'Microsoft.Compute/virtualMachines@2022-08-01' = {
     hardwareProfile: {
       vmSize: instanceType
     }
-    availabilitySet: ((!useAZ) ? availabilitySetId : json('null'))
+    availabilitySet: ((!useAZ) ? availabilitySetId : null)
     osProfile: {
       computerName: var_fwbBVmName
       adminUsername: adminUsername
@@ -796,7 +796,7 @@ resource fwbBVmName 'Microsoft.Compute/virtualMachines@2022-08-01' = {
     diagnosticsProfile: {
       bootDiagnostics: {
         enabled: serialConsoleEnabled
-        storageUri: ((fwbserialConsole == 'yes') ? reference(var_serialConsoleStorageAccountName, '2021-08-01').primaryEndpoints.blob : json('null'))
+        storageUri: ((fwbserialConsole == 'yes') ? reference(var_serialConsoleStorageAccountName, '2021-08-01').primaryEndpoints.blob : null)
       }
     }
   }
