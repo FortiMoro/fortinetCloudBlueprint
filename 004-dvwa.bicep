@@ -135,7 +135,7 @@ resource ubuntuVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     diagnosticsProfile: {
       bootDiagnostics: {
         enabled: serialConsoleEnabled
-        storageUri: ((dvwaserialConsole == 'yes') ? reference(var_serialConsoleStorageAccountName, '2021-08-01').primaryEndpoints.blob : json('null'))
+        storageUri: ((dvwaserialConsole == 'yes') ? reference(var_serialConsoleStorageAccountName, '2021-08-01').primaryEndpoints.blob : null)
       }
     }
   }

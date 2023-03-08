@@ -72,7 +72,7 @@ var fwbServerPool = '\nconfig server-policy server-pool\n edit "DVWA_POOL"\n con
 var configFortiGateIntegrationA = '\nconfig system fortigate-integration\nset address ${sn2IPfwbA}\nset port 443\nset protocol HTTPS\nset username admin\nset password ${adminPassword}\nset flag enable\nend\n'
 var letsEncrypt = '\nconfig system certificate letsencrypt\nedit "DVWA_LE_CERTIFICATE"\nset domain ${deploymentPrefix}.${location}.cloudapp.azure.com\nset validation-method TLS-ALPN\nnext\nend\n'
 var wvsProfile = '\nconfig wvs profile\nedit "DVWASCANPROFILE"\nset scan-target https://${sn1IPfwbA}\nset scan-template "OWASP Top 10"\nset custom-header0 "Cookie: security=low; PHPSESSID=XXXXXXXXXXXXXXXXXXXX"\nset form-based-authentication enable\nset form-based-username pablo\nset form-based-password letmein\nset form-based-auth-url https://${sn1IPfwbA}/login.php\nset username-field username\nset password-field password\nset session-check-url https://10.0.5.5/index.php\nset session-check-string Welcome\nset data-format %u=%U&%p=%P\nnext\nend\n'
-var bulkPoCConfig = loadTextContent('004-fortiwebCustomData.txt')
+var bulkPoCConfig = loadTextContent('005-fortiwebCustomData.txt')
 
 var fwbACustomData = base64(string(fwbACustomDataCombined))
 var fwbBCustomDataBodyHA = 'config system ha\n set override enable\n set mode active-active-high-volume\n set group-id ${fortiWebHaGroupId}\n set group-name ${toLower(deploymentPrefix)}\n set priority 2\n set tunnel-local ${sn2IPfwbB}\n set tunnel-peer ${sn2IPfwbA}\n set monitor port1 port2\nend\n'
@@ -673,7 +673,7 @@ resource fwbAVmName 'Microsoft.Compute/virtualMachines@2022-08-01' = {
   identity: {
     type: 'SystemAssigned'
   }
-  zones: (useAZ ? zone1 : json('null'))
+  zones: (useAZ ? zone1 : null)
   plan: {
     name: fortiWebImageSKU
     publisher: imagePublisher
@@ -683,7 +683,7 @@ resource fwbAVmName 'Microsoft.Compute/virtualMachines@2022-08-01' = {
     hardwareProfile: {
       vmSize: instanceType
     }
-    availabilitySet: ((!useAZ) ? availabilitySetId : json('null'))
+    availabilitySet: ((!useAZ) ? availabilitySetId : null)
     osProfile: {
       computerName: var_fwbAVmName
       adminUsername: adminUsername
@@ -727,7 +727,7 @@ resource fwbAVmName 'Microsoft.Compute/virtualMachines@2022-08-01' = {
     diagnosticsProfile: {
       bootDiagnostics: {
         enabled: serialConsoleEnabled
-        storageUri: ((fwbserialConsole == 'yes') ? reference(var_serialConsoleStorageAccountName, '2021-08-01').primaryEndpoints.blob : json('null'))
+        storageUri: ((fwbserialConsole == 'yes') ? reference(var_serialConsoleStorageAccountName, '2021-08-01').primaryEndpoints.blob : null)
       }
     }
   }
@@ -742,7 +742,7 @@ resource fwbBVmName 'Microsoft.Compute/virtualMachines@2022-08-01' = {
   identity: {
     type: 'SystemAssigned'
   }
-  zones: (useAZ ? zone2 : json('null'))
+  zones: (useAZ ? zone2 : null)
   plan: {
     name: fortiWebImageSKU
     publisher: imagePublisher
@@ -752,7 +752,7 @@ resource fwbBVmName 'Microsoft.Compute/virtualMachines@2022-08-01' = {
     hardwareProfile: {
       vmSize: instanceType
     }
-    availabilitySet: ((!useAZ) ? availabilitySetId : json('null'))
+    availabilitySet: ((!useAZ) ? availabilitySetId : null)
     osProfile: {
       computerName: var_fwbBVmName
       adminUsername: adminUsername
@@ -796,7 +796,7 @@ resource fwbBVmName 'Microsoft.Compute/virtualMachines@2022-08-01' = {
     diagnosticsProfile: {
       bootDiagnostics: {
         enabled: serialConsoleEnabled
-        storageUri: ((fwbserialConsole == 'yes') ? reference(var_serialConsoleStorageAccountName, '2021-08-01').primaryEndpoints.blob : json('null'))
+        storageUri: ((fwbserialConsole == 'yes') ? reference(var_serialConsoleStorageAccountName, '2021-08-01').primaryEndpoints.blob : null)
       }
     }
   }
