@@ -808,7 +808,7 @@ resource fwbBVmName 'Microsoft.Compute/virtualMachines@2022-08-01' = {
 //                                                                                                                                 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-output fortiWebPublicIP string = ((publicIPNewOrExistingOrNone == 'new') ? reference(publicIPId).ipAddress : '')
+output fortiWebPublicIP string = ((publicIPNewOrExistingOrNone == 'new') ? reference(publicIPId).dnsSettings.fqdn : '')
 output fwbACustomData string = fwbACustomData
 output fwbBCustomData string = fwbBCustomData
 output fwbACustomDataPreconfig string = fwbACustomDataPreconfig
