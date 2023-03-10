@@ -547,6 +547,7 @@ module fortiGateTemplate '002-fortigate.bicep' = {
 module fortiWebTemplate '003-fortiweb.bicep' = if (deployFortiWeb == 'yes') {
   name: 'fortiwebDeployment'
   params: {
+    subnet4StartAddress: subnet4StartAddress
     subnet7StartAddress: subnet7StartAddress
     vnetAddressPrefix: vnetAddressPrefix
     acceleratedNetworking: acceleratedNetworking

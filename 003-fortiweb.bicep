@@ -30,6 +30,7 @@ param publicIPType string
 param vnetNewOrExisting string
 param vnetName string
 param vnetResourceGroup string
+param subnet4StartAddress string
 param subnet5Name string 
 param subnet5Prefix string
 param subnet5StartAddress string
@@ -69,7 +70,7 @@ var fwbACustomDataPreconfig = '${fwbCustomDataVIP}${fwbStaticRoute}${fwbServerPo
 var fwbCustomDataVIP = '\nconfig system vip\n edit "DVWA_VIP"\n set vip ${reference(publicIPId).ipAddress}/32\n set interface port1\n next\n end\n'
 var fwbStaticRoute = '\nconfig router static\n edit 1\n set dst ${vnetAddressPrefix}\n set gateway ${sn2GatewayIP}\n set device port2\n next\n end\n'
 var fwbServerPool = '\nconfig server-policy server-pool\n edit "DVWA_POOL"\n config pserver-list\n edit 1\n set ip ${subnet7StartAddress}\n next\n end\n next\n end\n'
-var configFortiGateIntegrationA = '\nconfig system fortigate-integration\nset address ${sn2IPfwbA}\nset port 443\nset protocol HTTPS\nset username admin\nset password ${adminPassword}\nset flag enable\nend\n'
+var configFortiGateIntegrationA = '\nconfig system fortigate-integration\nset address ${subnet4StartAddress}\nset port 443\nset protocol HTTPS\nset username ${adminUsername}\nset password ${adminPassword}\nset flag enable\nend\n'
 var letsEncrypt = '\nconfig system certificate letsencrypt\nedit "DVWA_LE_CERTIFICATE"\nset domain ${deploymentPrefix}.${location}.cloudapp.azure.com\nset validation-method TLS-ALPN\nnext\nend\n'
 var wvsProfile = '\nconfig wvs profile\nedit "DVWASCANPROFILE"\nset scan-target https://${sn1IPfwbA}\nset scan-template "OWASP Top 10"\nset custom-header0 "Cookie: security=low; PHPSESSID=XXXXXXXXXXXXXXXXXXXX"\nset form-based-authentication enable\nset form-based-username pablo\nset form-based-password letmein\nset form-based-auth-url https://${sn1IPfwbA}/login.php\nset username-field username\nset password-field password\nset session-check-url https://10.0.5.5/index.php\nset session-check-string Welcome\nset data-format %u=%U&%p=%P\nnext\nend\n'
 var bulkPoCConfig = loadTextContent('005-fortiwebCustomData.txt')
@@ -83,7 +84,7 @@ var fwbbCustomDataCombined = {
   'usr-cli': fwbBCustomDataBody
 }
 var fwbBCustomData = base64(string(fwbbCustomDataCombined))
-var configFortiGateIntegrationB = '\nconfig system fortigate-integration\nset address ${sn2IPfwbB}\nset port 443\nset protocol HTTPS\nset username admin\nset password ${adminPassword}\nset flag enable\nend\n'
+var configFortiGateIntegrationB = '\nconfig system fortigate-integration\nset address ${subnet4StartAddress}\nset port 443\nset protocol HTTPS\nset username ${adminUsername}\nset password ${adminPassword}\nset flag enable\nend\n'
 var var_fwbAVmName = '${deploymentPrefix}-FWB-A'
 var var_fwbBVmName = '${deploymentPrefix}-FWB-B'
 var var_fwbANic1Name = '${var_fwbAVmName}-Nic1'
