@@ -60,12 +60,6 @@ The solution can be deployed using the Azure Portal or Azure CLI. There are 3 va
 ## Making modifications to the template
 
 If you do not wish to use the OOTB values for your deployment, changes can be made to the "000-main.bicep" file. This file is the ONLY file where values can be changed or modified. Changes to the modules will be inherited from the Main File.
-
-### Azure Portal
-
-[![Deploy Azure Portal Button](https://raw.githubusercontent.com/AJLab-GH/fortinetCloudBlueprint/main/Images/deploytoazure.svg?sanitize=true)]
-(https://portal.azure.com/#create/Microsoft.Template/uri/https://raw.githubusercontent.com/AJLab-GH/fortinetCloudBlueprint/main/doc/JSON-Deployment/template.json)
-
 ### Azure CLI
 
 To deploy via Azure Cloud Shell you can connect via the Azure Portal or directly to [https://shell.azure.com/](https://shell.azure.com/).
