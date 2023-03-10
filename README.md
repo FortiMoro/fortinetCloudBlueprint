@@ -64,7 +64,7 @@ If you do not wish to use the OOTB values for your deployment, changes can be ma
 ### Azure Portal
 
 [![Deploy Azure Portal Button](https://raw.githubusercontent.com/AJLab-GH/fortinetCloudBlueprint/main/Images/deploytoazure.svgsanitize=true)]
-(https://raw.githubusercontent.com/AJLab-GH/fortinetCloudBlueprint/main/doc/JSON-Deployment/template.json)
+(https://portal.azure.com/#create/Microsoft.Template/uri/https://raw.githubusercontent.com/AJLab-GH/fortinetCloudBlueprint/main/doc/JSON-Deployment/template.json)
 
 ### Azure CLI
 
