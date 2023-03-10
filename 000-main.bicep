@@ -599,7 +599,7 @@ module dvwaTemplate '004-dvwa.bicep' = if (deployDVWA == 'yes') {
     dvwaserialConsole: dvwaserialConsole
   }
   dependsOn: [
-    networkTemplate
+    fortiGateTemplate
   ]
 }
 
