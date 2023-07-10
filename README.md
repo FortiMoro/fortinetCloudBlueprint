@@ -6,7 +6,6 @@ The purpose of this architecture is to provide the user with a set of templates 
 
 ![fgfwb](https://raw.githubusercontent.com/AJLab-GH/fortinetCloudBlueprint/staging/Images/fgfwb.png)
 
-
 The FortiGate and FortiWeb in this solution compliment one-another. The FortiWeb has advanced features that the FortiGate does not, but can only apply those protections to HTTP, HTTPs. The FortiGate can support a variety of protocols, perform dynamic routing, terminate VPN, perform SD-WAN and so much more.
 
 ![DesignConsiderations](https://raw.githubusercontent.com/AJLab-GH/fortinetCloudBlueprint/staging/Images/designconsiderations.png)
@@ -51,7 +50,7 @@ These templates can also be used to extend or customized based on your requireme
 
 ## How to deploy
 
-The solution can be deployed using the Azure Portal, Azure CLI, or a github workflow. There are 3 variables needed to complete kickstart the deployment. The BICEP deployment will ask them automatically via AZ CLI. When you deploy the ARM template the Azure Portal will request the variables as a requirement.
+The solution can be deployed using the Azure Portal, Azure CLI, or a GitHub workflow. There are 3 variables needed to complete kickstart the deployment. The BICEP deployment will ask them automatically via AZ CLI. When you deploy the ARM template the Azure Portal will request the variables as a requirement.
 
 - PREFIX : This prefix will be added to each of the created resources for easy of use, manageability and visibility.
 - USERNAME : The username used to login to the FortiGate GUI and SSH mangement UI.
@@ -74,15 +73,37 @@ git clone https://github.com/AJLab-GH/fortinetCloudBlueprint.git
 cd fortinetCloudBlueprint
 ```
 
-Create a resource group for your deployment
+- Create a resource group for your deployment
 
 ```text
- az group create --location (location) --name (resourceGroupName)
+az group create --location (location) --name (resourceGroupName)
 ```
 
 ![Create Resource Group](https://raw.githubusercontent.com/AJLab-GH/fortinetCloudBlueprint/staging/Images/createRG.png)
 
-Deploy the templates
+The terms for the PAYG or BYOL images in the Azure Marketplace needs to be accepted once before usage. This is done automatically during deployment via the Azure Portal. For the Azure CLI the commands below need to be run before the first deployment in a subscription.
+
+- BYOL FortiGate
+```
+az vm image terms accept --publisher fortinet --offer fortinet_fortigate-vm_v5 --plan fortinet_fg-vm
+```
+
+- BYOL FortiWeb
+```
+az vm image terms accept --publisher fortinet --offer fortinet_fortiweb-vm_v5 --plan fortinet_fw-vm
+```
+
+- PAYG FortiGate
+```
+az vm image terms accept --publisher fortinet --offer fortinet_fortigate-vm_v5 --plan fortinet_fg-vm_payg_2022
+```
+
+- PAYG FortiWeb
+```
+az vm image terms accept --publisher fortinet --offer fortinet_fortiweb-vm_v5 --plan fortinet_fw-vm_payg_v2
+```
+
+- Deploy the templates
 
 ```text
  az deployment group create --name (deploymentName) --resource-group (resourceGroupName) --template-file 000-main.bicep
@@ -195,15 +216,6 @@ The Bicep template deploys different resources and it is required to have the ac
   - It must be 12 characters or longer
   - It needs to contain characters from at least 3 of the following groups: uppercase characters, lowercase characters, numbers, and special characters excluding '\' or '-'
 
-- The terms for the PAYG or BYOL images in the Azure Marketplace needs to be accepted once before usage. This is done automatically during deployment via the Azure Portal. For the Azure CLI the commands below need to be run before the first deployment in a subscription.
-  - BYOL FortiGate
-`az vm image terms accept --publisher fortinet --offer fortinet_fortigate-vm_v5 --plan fortinet_fg-vm`
-  - BYOL FortiWeb
-`az vm image terms accept --publisher fortinet --offer fortinet_fortiweb-vm_v5 --plan fortinet_fw-vm`
-  - PAYG FortiGate
-`az vm image terms accept --publisher fortinet --offer fortinet_fortigate-vm_v5 --plan fortinet_fg-vm_payg_2022`
-  - PAYG FortiWeb
-`az vm image terms accept --publisher fortinet --offer fortinet_fortiweb-vm_v5 --plan fortinet_fw-vm_payg_v2`
 
 ## Fabric Connector
 
