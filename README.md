@@ -51,7 +51,7 @@ These templates can also be used to extend or customized based on your requireme
 
 ## How to deploy
 
-The solution can be deployed using the Azure Portal or Azure CLI. There are 3 variables needed to complete kickstart the deployment. The BICEP deployment will ask them automatically via AZ CLI. When you deploy the ARM template the Azure Portal will request the variables as a requirement.
+The solution can be deployed using the Azure Portal, Azure CLI, or a github workflow. There are 3 variables needed to complete kickstart the deployment. The BICEP deployment will ask them automatically via AZ CLI. When you deploy the ARM template the Azure Portal will request the variables as a requirement.
 
 - PREFIX : This prefix will be added to each of the created resources for easy of use, manageability and visibility.
 - USERNAME : The username used to login to the FortiGate GUI and SSH mangement UI.
@@ -60,6 +60,7 @@ The solution can be deployed using the Azure Portal or Azure CLI. There are 3 va
 ## Making modifications to the template
 
 If you do not wish to use the OOTB values for your deployment, changes can be made to the "000-main.bicep" file. This file is the ONLY file where values can be changed or modified. Changes to the modules will be inherited from the Main File.
+
 ### Azure CLI
 
 To deploy via Azure Cloud Shell you can connect via the Azure Portal or directly to [https://shell.azure.com/](https://shell.azure.com/).
@@ -93,16 +94,18 @@ The script will ask you a few questions to bootstrap a full deployment.
 After deployment you can output the important values such as public IP addresses, etc that you'll need to connect to your deployment.
 
 ```text
-az deployment group show  -g (resourceGroupName)   -n (deploymentName)  --query properties.outputs
+az deployment group show -g (resourceGroupName) -n (deploymentName) --query properties.outputs
 ```
 
 ![Input Variables](https://raw.githubusercontent.com/AJLab-GH/fortinetCloudBlueprint/staging/Images/Outputs.png)
 
-## Deleting the Deployments
+#### Deleting the Deployment
 
 ```text
-az deployment group delete  -g (resourceGroupName)   -n (deploymentName)
+az deployment group delete -g (resourceGroupName) -n (deploymentName)
 ```
+
+#### GitHub Workflow
 
 ## Requirements and limitations
 
