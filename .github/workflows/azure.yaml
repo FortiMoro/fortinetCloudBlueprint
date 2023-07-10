@@ -53,6 +53,14 @@ jobs:
       run: |
         az group create --location ${{ steps.dotenv.outputs.LOCATION }} --name ${{ steps.get-repo-name.outputs.repo }}
 
+    - name: 'Accept License Agreement'
+      if: steps.dotenv.outputs.DEPLOYED == 'true'
+      run: |
+        az vm image terms accept --publisher fortinet --offer fortinet_fortigate-vm_v5 --plan fortinet_fg-vm
+        az vm image terms accept --publisher fortinet --offer fortinet_fortiweb-vm_v5 --plan fortinet_fw-vm
+        az vm image terms accept --publisher fortinet --offer fortinet_fortigate-vm_v5 --plan fortinet_fg-vm_payg_2022
+        az vm image terms accept --publisher fortinet --offer fortinet_fortiweb-vm_v5 --plan fortinet_fw-vm_payg_v2
+
     - name: deploy
       if: steps.dotenv.outputs.DEPLOYED == 'true'
       uses: azure/arm-deploy@v1
@@ -63,14 +71,6 @@ jobs:
         template: ./000-main.bicep
         parameters: "adminPassword=${{ secrets.adminPassword }} adminUsername=${{ secrets.adminUsername }} deploymentPrefix=${{ steps.get-repo-name.outputs.repo }}"
         failOnStdErr: false
-
-    - name: 'Accept License Agreement'
-      if: steps.dotenv.outputs.DEPLOYED == 'true'
-      run: |
-        az vm image terms accept --publisher fortinet --offer fortinet_fortigate-vm_v5 --plan fortinet_fg-vm
-        az vm image terms accept --publisher fortinet --offer fortinet_fortiweb-vm_v5 --plan fortinet_fw-vm
-        az vm image terms accept --publisher fortinet --offer fortinet_fortigate-vm_v5 --plan fortinet_fg-vm_payg_2022
-        az vm image terms accept --publisher fortinet --offer fortinet_fortiweb-vm_v5 --plan fortinet_fw-vm_payg_v2
 
     - name: 'Show Output'
       if: steps.dotenv.outputs.DEPLOYED == 'true'

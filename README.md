@@ -57,7 +57,7 @@ The solution can be deployed using the Azure Portal, Azure CLI, or a github work
 - USERNAME : The username used to login to the FortiGate GUI and SSH mangement UI.
 - PASSWORD : The password used for the FortiGate GUI and SSH management UI.
 
-## Making modifications to the template
+### Making modifications to the template
 
 If you do not wish to use the OOTB values for your deployment, changes can be made to the "000-main.bicep" file. This file is the ONLY file where values can be changed or modified. Changes to the modules will be inherited from the Main File.
 
@@ -105,7 +105,9 @@ az deployment group show -g (resourceGroupName) -n (deploymentName) --query prop
 az deployment group delete -g (resourceGroupName) -n (deploymentName)
 ```
 
-#### GitHub Workflow
+### GitHub Workflow
+
+
 
 ## Requirements and limitations
 
