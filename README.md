@@ -107,7 +107,21 @@ az deployment group delete -g (resourceGroupName) -n (deploymentName)
 
 ### GitHub Workflow
 
+Provide the application's **Client ID**, **Tenant ID**, and **Subscription ID** to the login action. These values are stored in GitHub secrets and referenced in the workflow.
 
+1. Open your GitHub repository and go to **Settings**.
+
+1. Select **Settings > Secrets > New secret**.
+
+1. Create secrets for `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, and `AZURE_SUBSCRIPTION_ID`. Use these values from your Active Directory application for your GitHub secrets:
+
+    |GitHub Secret  | Active Directory Application  |
+    |---------|---------|
+    |AZURE_CLIENT_ID     |      Application (client) ID   |
+    |AZURE_TENANT_ID     |     Directory (tenant) ID    |
+    |AZURE_SUBSCRIPTION_ID     |     Subscription ID    |
+
+1. Save each secret by selecting **Add secret**.
 
 ## Requirements and limitations
 
