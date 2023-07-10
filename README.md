@@ -107,6 +107,8 @@ az deployment group delete -g (resourceGroupName) -n (deploymentName)
 
 ### GitHub Workflow
 
+#### Create GitHub Secrets
+
 Provide the application's **Client ID**, **Tenant ID**, and **Subscription ID** to the login action. These values are stored in GitHub secrets and referenced in the workflow.
 
 1. Open your GitHub repository and go to **Settings**.
@@ -117,11 +119,67 @@ Provide the application's **Client ID**, **Tenant ID**, and **Subscription ID** 
 
     |GitHub Secret  | Active Directory Application  |
     |---------|---------|
-    |AZURE_CLIENT_ID     |      Application (client) ID   |
-    |AZURE_TENANT_ID     |     Directory (tenant) ID    |
-    |AZURE_SUBSCRIPTION_ID     |     Subscription ID    |
+    |AZURE_CLIENT_ID       | Application (client) ID   |
+    |AZURE_TENANT_ID       | Directory (tenant) ID    |
+    |AZURE_SUBSCRIPTION_ID | Subscription ID    |
+    |AZURE_RG              | Resource Group |
+    |adminPassword         | VM admin password |
+    |adminUsername         | VM admin username |
 
 1. Save each secret by selecting **Add secret**.
+
+#### Create workflow
+
+1. From your GitHub repository, select **Actions** from the top menu.
+1. Select **New workflow**.
+1. Select **set up a workflow yourself**.
+1. Replace the content of the yml file with the following code:
+
+```yml
+---
+name: Azure ARM
+on: [push]
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: 'Checkout Repo'
+      uses: actions/checkout@v3
+
+    - name: 'Az CLI login'
+      uses: azure/login@v1
+      with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - name: 'Create Resource Group'
+      run: |
+        az group create --location CanadaEast --name ${{ secrets.AZURE_RG }}
+
+    - name: 'Accept License Agreement'
+      run: |
+        az vm image terms accept --publisher fortinet --offer fortinet_fortigate-vm_v5 --plan fortinet_fg-vm
+        az vm image terms accept --publisher fortinet --offer fortinet_fortiweb-vm_v5 --plan fortinet_fw-vm
+        az vm image terms accept --publisher fortinet --offer fortinet_fortigate-vm_v5 --plan fortinet_fg-vm_payg_2022
+        az vm image terms accept --publisher fortinet --offer fortinet_fortiweb-vm_v5 --plan fortinet_fw-vm_payg_v2
+
+    - name: deploy
+      uses: azure/arm-deploy@v1
+      with:
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ secrets.AZURE_RG }}
+        template: ./000-main.bicep
+        parameters: "adminPassword=${{ secrets.adminPassword }} adminUsername=${{ secrets.adminUsername }} deploymentPrefix=${{ secrets.AZURE_RG }}"
+        failOnStdErr: false
+
+    - name: 'Show Output'
+      run: az deployment group show -g ${{ secrets.AZURE_RG }} -n ${{ secrets.AZURE_RG }} --query properties.outputs
+```
 
 ## Requirements and limitations
 
