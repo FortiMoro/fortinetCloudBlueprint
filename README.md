@@ -50,7 +50,7 @@ These templates can also be used to extend or customized based on your requireme
 
 ## How to deploy
 
-The solution can be deployed using the Azure Portal, Azure CLI, or a GitHub workflow. There are 3 variables needed to complete kickstart the deployment. The BICEP deployment will ask them automatically via AZ CLI. When you deploy the ARM template the Azure Portal will request the variables as a requirement.
+The solution can be deployed using the Azure Portal, Azure CLI, or a GitHub workflow. There are 3 variables needed for the deployment. The AS CLI BICEP deployment will prompt for input automatically. When deploying the ARM template with the Azure Portal the wizard will prompt for variable input.
 
 - PREFIX : This prefix will be added to each of the created resources for easy of use, manageability and visibility.
 - USERNAME : The username used to login to the FortiGate GUI and SSH mangement UI.
@@ -62,10 +62,9 @@ If you do not wish to use the OOTB values for your deployment, changes can be ma
 
 ### Azure CLI
 
-To deploy via Azure Cloud Shell you can connect via the Azure Portal or directly to [https://shell.azure.com/](https://shell.azure.com/).
+To deploy via Azure Cloud Shell, connect via the Azure Portal or directly to [https://shell.azure.com/](https://shell.azure.com/).
 
-- Login into the Azure Cloud Shell
-- Run the following commands in the Azure Cloud:
+- Login to the Azure Cloud Shell, and execute the following commands in the Azure Cloud Shell:
 
 ```text
 az bicep upgrade
