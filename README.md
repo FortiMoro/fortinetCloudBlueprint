@@ -81,7 +81,7 @@ az group create --location (location) --name (resourceGroupName)
 
 ![Create Resource Group](https://raw.githubusercontent.com/AJLab-GH/fortinetCloudBlueprint/staging/Images/createRG.png)
 
-- The terms for the PAYG or BYOL images in the Azure Marketplace needs to be accepted once before usage. This is done automatically during deployment via the Azure Portal. For the Azure CLI the commands below need to be run before the first deployment in a subscription.
+- Accept the terms for the PAYG or BYOL images in the Azure Marketplace before creating a deployment.
 
 BYOL FortiGate
 ```
