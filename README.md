@@ -50,7 +50,7 @@ These templates can also be used to extend or customized based on your requireme
 
 ## How to deploy
 
-The solution can be deployed using Azure DevOps, Azure CLI, or a GitHub workflow. There are 3 variables needed for the deployment. The AS CLI BICEP deployment will prompt for input automatically. When deploying the ARM template with the Azure Portal the wizard will prompt for variable input.
+The solution can be deployed using Azure DevOps, Azure CLI, or a GitHub workflow. There are 3 variables needed for the deployment. The AZ CLI BICEP deployment will prompt for input automatically. When deploying the ARM template with the Azure Portal the wizard will prompt for variable input.
 
 - deploymentPrefix: This prefix will be added to each of the created resources for easy of use, manageability and visibility.
 - adminUsername: The username used to login to the FortiGate GUI and SSH mangement UI.
