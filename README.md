@@ -50,15 +50,52 @@ These templates can also be used to extend or customized based on your requireme
 
 ## How to deploy
 
-The solution can be deployed using the Azure Portal, Azure CLI, or a GitHub workflow. There are 3 variables needed for the deployment. The AS CLI BICEP deployment will prompt for input automatically. When deploying the ARM template with the Azure Portal the wizard will prompt for variable input.
+The solution can be deployed using Azure DevOps, Azure CLI, or a GitHub workflow. There are 3 variables needed for the deployment. The AS CLI BICEP deployment will prompt for input automatically. When deploying the ARM template with the Azure Portal the wizard will prompt for variable input.
 
-- PREFIX : This prefix will be added to each of the created resources for easy of use, manageability and visibility.
-- USERNAME : The username used to login to the FortiGate GUI and SSH mangement UI.
-- PASSWORD : The password used for the FortiGate GUI and SSH management UI.
+- deploymentPrefix: This prefix will be added to each of the created resources for easy of use, manageability and visibility.
+- adminUsername: The username used to login to the FortiGate GUI and SSH mangement UI.
+- adminPassword: The password used for the FortiGate GUI and SSH management UI.
 
 ### Making modifications to the template
 
 If you do not wish to use the OOTB values for your deployment, changes can be made to the "000-main.bicep" file. This file is the ONLY file where values can be changed or modified. Changes to the modules will be inherited from the Main File.
+
+### Azure DevOps
+
+- Log into https://dev.azure.com and create a pipeline with the following file and create variables.
+
+    |Variable Name  | Value  |
+    |---------|---------|
+    |adminPassword         | VM admin password |
+    |adminUsername         | VM admin username |
+    |deploymentPrefix      | string prefix     |
+
+```yml
+trigger:
+- main
+
+variables:
+- group: fortinet-secure-cloud-blueprint
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: 'fortinet-secure-cloud-blueprint'
+    subscriptionId: '8675309-XXXX-YYYY-ZZZZ-8675309'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: 'fortinet-secure-cloud-blueprint'
+    location: 'Canada Central'
+    templateLocation: 'Linked artifact'
+    csmFile: './000-main.bicep'
+    deploymentMode: 'Incremental'
+    deploymentName: 'fortinet-secure-cloud-blueprint'
+    overrideParameters: -adminUsername $(adminUsername) -adminPassword $(adminPassword) -deploymentPrefix $(deploymentPrefix)
+
+```
 
 ### Azure CLI
 
