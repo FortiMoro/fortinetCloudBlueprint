@@ -1004,7 +1004,7 @@ output fortiGateFQDN string = ((publicIP1NewOrExisting == 'new') ? reference(pub
 output fortiGateAManagementPublicIP string = ((publicIP2NewOrExisting == 'new') ? reference(publicIP2Id).ipAddress : '')
 output fortiGateBManagementPublicIP string = ((publicIP3NewOrExisting == 'new') ? reference(publicIP3Id).ipAddress : '')
 output externalLBFEName string = externalLBFEName
-output fortiGateLBPublicIPFQDN string = ((publicIP1Name_resource == 'new') ? reference(publicIP1Id).dnsSettings.fqdn : '')
+output fortiGateLBPublicIPFQDN string = ((publicIP1NewOrExisting == 'new') ? reference(publicIP1Id).dnsSettings.fqdn : '')
 
 
 
