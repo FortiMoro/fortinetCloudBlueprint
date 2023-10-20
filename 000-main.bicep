@@ -555,7 +555,7 @@ module fortiWebTemplate '003-fortiweb.bicep' = if (deployFortiWeb == 'yes') {
     vnetResourceGroup: vnetResourceGroup
      }
   dependsOn: [
-    networkTemplate
+    fortiGateTemplate
   ]
 }
 
@@ -575,7 +575,7 @@ module dvwaTemplate '004-dvwa.bicep' = if (deployDVWA == 'yes') {
     dvwaserialConsole: dvwaserialConsole
   }
   dependsOn: [
-    fortiGateTemplate
+    fortiWebTemplate
   ]
 }
 
