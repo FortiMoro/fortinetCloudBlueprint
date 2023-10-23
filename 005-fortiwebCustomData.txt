@@ -855,10 +855,10 @@ edit "DVWA_POLICY"
 set ssl enable
 set vserver DVWA_VS
 set service HTTP
-set https-service HTTPS
 set web-protection-profile DVWA_PROTECTION_PROFILE
 set replacemsg Predefined
 set server-pool DVWA_POOL
+set https-service HTTPS
 set http-to-https enable
 set syncookie enable
 set tlog enable
