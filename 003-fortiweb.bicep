@@ -76,7 +76,7 @@ var wvsProfile = 'config wvs profile\n edit "DVWASCANPROFILE"\n set scan-target 
 var bulkPoCConfig = loadTextContent('005-fortiwebCustomData.txt')
 
 var fwbACustomData = base64(string(fwbACustomDataCombined))
-var fwbBCustomDataBodyHA = 'config system ha\n set override enable\n set mode active-active-high-volume\n set group-id ${fortiWebHaGroupId}\n set group-name ${toLower(deploymentPrefix)}\n set priority 2\n set tunnel-local ${sn2IPfwbB}\n set tunnel-peer ${sn2IPfwbA}\n set monitor port1 port2\n end\n'
+var fwbBCustomDataBodyHA = 'config system ha\n set mode active-active-high-volume\n set group-id ${fortiWebHaGroupId}\n set group-name ${toLower(deploymentPrefix)}\n set priority 2\n set tunnel-local ${sn2IPfwbB}\n set tunnel-peer ${sn2IPfwbA}\n set monitor port1 port2\n set override enable\n end\n'
 var fwbBCustomDataBody = '${fwbGlobalDataBody}${fwbBCustomDataBodyHA}${fwbBCustomDataPreconfig}${fortiWebBAdditionalCustomData}\n'
 var fwbBCustomDataPreconfig = '${fwbCustomDataVIP}${fwbStaticRoute}${fwbServerPool}${configFortiGateIntegrationB}${letsEncrypt}${bulkPoCConfig}\n'
 var fwbbCustomDataCombined = { 
