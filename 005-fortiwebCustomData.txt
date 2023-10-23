@@ -843,6 +843,7 @@ set geo-block-list-policy DVWA_GEO_PROTECTION
 set custom-access-policy DVWA_CUSTOM_POLICY
 set ip-intelligence enable
 set cookie-security-policy DVWA_COOKIE_SECURITY
+set profile-id 2579818973326303562
 set fortigate-quarantined-ips enable
 set csrf-protection DVWA_CSRF_PROTECTION
 set user-tracking-policy DVWA_USER_TRACKING
@@ -861,6 +862,7 @@ set server-pool DVWA_POOL
 set https-service HTTPS
 set http-to-https enable
 set syncookie enable
+set policy-id 15841312090804693283
 set tlog enable
 next
 end
