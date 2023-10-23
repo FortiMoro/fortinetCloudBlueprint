@@ -173,7 +173,7 @@ next
 end
 config waf allow-method-policy
 edit "DVWA_ALLOW_METHOD"
-set allow-method get post 
+set allow-method get post
 next
 end
 config waf file-upload-restriction-rule
@@ -274,7 +274,7 @@ config rule-list
 edit 1
 set type-checked enable
 set argument-name ip
-set location url body 
+set location url body
 set data-type Address
 next
 end
@@ -866,7 +866,7 @@ next
 end
 config wvs policy
 edit "DVWASCANPOLICY"
-set report_format html xml pdf 
+set report_format html xml pdf
 set profile DVWASCANPROFILE
 next
 end
