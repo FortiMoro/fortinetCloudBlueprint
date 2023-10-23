@@ -73,7 +73,7 @@ var fwbServerPool = 'config server-policy server-pool\n edit "DVWA_POOL"\n confi
 var configFortiGateIntegrationA = 'config system fortigate-integration\n set server ${subnet4StartAddress}\n set port 443\n set protocol HTTPS\n set username ${adminUsername}\n set password ${adminPassword}\n set flag enable\n end\n'
 var letsEncrypt = 'config system certificate letsencrypt\n edit "DVWA_LE_CERTIFICATE"\n set domain ${deploymentPrefix}.${location}.cloudapp.azure.com\n set validation-method TLS-ALPN\n next\n end\n'
 var wvsProfile = 'config wvs profile\n edit "DVWASCANPROFILE"\n set scan-target https://${sn1IPfwbA}\n set scan-template "OWASP Top 10"\n set custom-header0 "Cookie: security=low; PHPSESSID=XXXXXXXXXXXXXXXXXXXX"\n set form-based-authentication enable\n set form-based-username pablo\n set form-based-password letmein\n set form-based-auth-url https://${sn1IPfwbA}/login.php\n set username-field username\n set password-field password\n set session-check-url https://10.0.5.5/index.php\n set session-check-string Welcome\n set data-format %u=%U&%p=%P\n next\n end\n'
-var bulkPoCConfig = loadFileAsBase64('005-fortiwebCustomData.txt')
+var bulkPoCConfig = loadTextContent('005-fortiwebCustomData.txt')
 
 var fwbACustomData = base64(string(fwbACustomDataCombined))
 var fwbBCustomDataBodyHA = 'config system ha\n set override enable\n set mode active-active-high-volume\n set group-id ${fortiWebHaGroupId}\n set group-name ${toLower(deploymentPrefix)}\n set priority 2\n set tunnel-local ${sn2IPfwbB}\n set tunnel-peer ${sn2IPfwbA}\n set monitor port1 port2\n end\n'
