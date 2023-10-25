@@ -866,9 +866,3 @@ set policy-id 15841312090804693283
 set tlog enable
 next
 end
-config wvs policy
-edit "DVWASCANPOLICY"
-set report_format html xml pdf
-set profile DVWASCANPROFILE
-next
-end
