@@ -66,8 +66,10 @@ var fwbACustomDataCombined = {
   'cloud-initd' : 'enable'
   'usr-cli': fwbACustomDataBody
   }
-var fwbACustomDataPreconfig = '${fwbCustomDataVIP}${fwbStaticRoute}${fwbServerPool}${configFortiGateIntegrationA}${letsEncrypt}${wvsProfile}${bulkPoCConfig}\n'
+var fwbACustomDataPreconfig = '${fwbAStaticPort2IP}${fwbCustomDataVIP}${fwbStaticRoute}${fwbServerPool}${configFortiGateIntegrationA}${letsEncrypt}${wvsProfile}${bulkPoCConfig}\n'
 var fwbCustomDataVIP = 'config system vip\n edit "DVWA_VIP"\n set vip ${reference(publicIPId).ipAddress}/32\n set interface port1\n next\n end\n'
+var fwbAStaticPort2IP = 'config system interface\n edit "port2"\n set type physical\n set mode static\n set ip ${sn2IPfwbA}/${subnet6cidrvalue}\n end\n'
+var fwbBStaticPort2IP = 'config system interface\n edit "port2"\n set type physical\n set mode static\n set ip ${sn2IPfwbB}/${subnet6cidrvalue}\n end\n'
 var fwbStaticRoute = 'config router static\n edit 1\n set dst ${vnetAddressPrefix}\n set gateway ${sn2GatewayIP}\n set device port2\n next\n end\n'
 var fwbServerPool = 'config server-policy server-pool\n edit "DVWA_POOL"\n config pserver-list\n edit 1\n set ip ${subnet7StartAddress}\n next\n end\n next\n end\n'
 var configFortiGateIntegrationA = 'config system fortigate-integration\n set server ${subnet4StartAddress}\n set port 443\n set protocol HTTPS\n set username ${adminUsername}\n set password ${adminPassword}\n set flag enable\n end\n'
@@ -78,7 +80,7 @@ var bulkPoCConfig = loadTextContent('005-fortiwebCustomData.txt')
 var fwbACustomData = base64(string(fwbACustomDataCombined))
 var fwbBCustomDataBodyHA = 'config system ha\n set mode active-active-high-volume\n set group-id ${fortiWebHaGroupId}\n set group-name ${toLower(deploymentPrefix)}\n set priority 2\n set tunnel-local ${sn2IPfwbB}\n set tunnel-peer ${sn2IPfwbA}\n set monitor port1 port2\n set override enable\n end\n'
 var fwbBCustomDataBody = '${fwbGlobalDataBody}${fwbBCustomDataBodyHA}${fwbBCustomDataPreconfig}${fortiWebBAdditionalCustomData}\n'
-var fwbBCustomDataPreconfig = '${fwbCustomDataVIP}${fwbStaticRoute}${fwbServerPool}${configFortiGateIntegrationB}${letsEncrypt}${bulkPoCConfig}\n'
+var fwbBCustomDataPreconfig = '${fwbBStaticPort2IP}${fwbCustomDataVIP}${fwbStaticRoute}${fwbServerPool}${configFortiGateIntegrationB}${letsEncrypt}${bulkPoCConfig}\n'
 var fwbbCustomDataCombined = { 
   'cloud-initd': 'enable'
   'usr-cli': fwbBCustomDataBody
@@ -134,6 +136,8 @@ var sn2GatewayIP = '${sn2IPArray0}.${sn2IPArray1}.${sn2IPArray2}.${sn2IPArray3}'
 var sn2IPArray3 = string((int(sn2IPArray2nd[0]) + 1))
 var sn2IPArray2nd = split(sn2IPArray2ndString, '/')
 var sn2IPArray2ndString = string(sn2IPArray[3])
+var splitPrefix = split(subnet6Prefix, '/')
+var subnet6cidrvalue = string(int(splitPrefix[1]))
 var sn2IPfwbA = '${sn2IPArray0}.${sn2IPArray1}.${sn2IPArray2}.${(int(sn2IPStartAddress[3]) + 1)}'
 var sn2IPfwbB = '${sn2IPArray0}.${sn2IPArray1}.${sn2IPArray2}.${(int(sn2IPStartAddress[3]) + 2)}'
 var externalLBName_NatRule_FWBAdminPerm_fwbA = '${var_fwbAVmName}FWBAdminPerm'
