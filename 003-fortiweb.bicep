@@ -66,7 +66,7 @@ var fwbACustomDataCombined = {
   'cloud-initd' : 'enable'
   'usr-cli': fwbACustomDataBody
   }
-var fwbACustomDataPreconfig = '${fwbAStaticPort2IP}${fwbCustomDataVIP}${fwbStaticRoute}${fwbServerPool}${configFortiGateIntegrationA}${letsEncrypt}${wvsProfile}${bulkPoCConfig}\n'
+var fwbACustomDataPreconfig = '${fwbAStaticPort2IP}${fwbCustomDataVIP}${fwbStaticRoute}${fwbServerPool}${configFortiGateIntegrationA}${letsEncrypt}${wvsProfile}${wvsPolicy}${bulkPoCConfig}\n'
 var fwbCustomDataVIP = 'config system vip\n edit "DVWA_VIP"\n set vip ${reference(publicIPId).ipAddress}/32\n set interface port1\n next\n end\n'
 var fwbAStaticPort2IP = 'config system interface\n edit "port2"\n set type physical\n set mode static\n set ip ${sn2IPfwbA}/${subnet6cidrvalue}\n end\n'
 var fwbBStaticPort2IP = 'config system interface\n edit "port2"\n set type physical\n set mode static\n set ip ${sn2IPfwbB}/${subnet6cidrvalue}\n end\n'
@@ -75,6 +75,7 @@ var fwbServerPool = 'config server-policy server-pool\n edit "DVWA_POOL"\n confi
 var configFortiGateIntegrationA = 'config system fortigate-integration\n set server ${subnet4StartAddress}\n set port 443\n set protocol HTTPS\n set username ${adminUsername}\n set password ${adminPassword}\n set flag enable\n end\n'
 var letsEncrypt = 'config system certificate letsencrypt\n edit "DVWA_LE_CERTIFICATE"\n set domain ${deploymentPrefix}.${location}.cloudapp.azure.com\n set validation-method TLS-ALPN\n next\n end\n'
 var wvsProfile = 'config wvs profile\n edit "DVWASCANPROFILE"\n set scan-target https://${sn1IPfwbA}\n set scan-template "OWASP Top 10"\n set custom-header0 "Cookie: security=low; PHPSESSID=XXXXXXXXXXXXXXXXXXXX"\n set form-based-authentication enable\n set form-based-username pablo\n set form-based-password letmein\n set form-based-auth-url https://${sn1IPfwbA}/login.php\n set username-field username\n set password-field password\n set session-check-url https://10.0.5.5/index.php\n set session-check-string Welcome\n set data-format %u=%U&%p=%P\n next\n end\n'
+var wvsPolicy = 'config wvs policy\n edit "DVWASCANPOLICY"\n set report_format html xml pdf\n set profile DVWASCANPROFILE\n next\n end\n'
 var bulkPoCConfig = loadTextContent('005-fortiwebCustomData.txt')
 
 var fwbACustomData = base64(string(fwbACustomDataCombined))
