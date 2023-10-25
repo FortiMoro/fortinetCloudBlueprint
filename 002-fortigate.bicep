@@ -89,21 +89,31 @@ var fgaCustomDataCombined = '${customDataHeader}${fgaCustomDataBody}${customData
 var fgbCustomDataCombined = '${customDataHeader}${fgbCustomDataBody}${customDataLicenseHeader}${fortiGateLicenseBYOLB}${customDataFooter}'
 var fgaCustomData = base64(((fortiGateLicenseBYOLA == '') ? fgaCustomDataBody : fgaCustomDataCombined))
 var fgbCustomData = base64(((fortiGateLicenseBYOLB == '') ? fgbCustomDataBody : fgbCustomDataCombined))
-var fortiGateVIPConfig = '\nconfig firewall vip\nedit "Ubuntu-SSH-VIP"\nset extip ${publicIP1Name_resource.properties.ipAddress}\nset mappedip "${subnet7StartAddress}"\nset extintf "any"\nset portforward enable\nset extport 2222\nset mappedport 22\nnext\nend\n'
+var fortiGateVIPConfig = '\nconfig firewall vip\nedit "DVWA-SSH-VIP"\nset extip ${publicIP1Name_resource.properties.ipAddress}\nset mappedip "${subnet7StartAddress}"\nset extintf "any"\nset portforward enable\nset extport 2222\nset mappedport 22\nnext\nedit "DVWA-HTTP-VIP"\nset extip ${publicIP1Name_resource.properties.ipAddress}\nset mappedip "${subnet7StartAddress}"\nset extintf "any"\nset portforward enable\nset extport 80\nset mappedport 80\nnext\nend\n'
 var fortiGateIPv4Policy = '''
 config firewall policy
     edit 1
-        set name "SSH_Inbound_Access"
+        set name "DVWA-SSH-Inbound_Access"
         set srcintf "port1"
         set dstintf "port2"
         set action accept
         set srcaddr "all"
-        set dstaddr "Ubuntu-SSH-VIP"
+        set dstaddr "DVWA-SSH-VIP"
         set schedule "always"
         set service "SSH"
     next
-    edit 2
-        set name "Ubuntu_Outbound"
+        edit 2
+        set name "DVWA-HTTP-Inbound_Access"
+        set srcintf "port1"
+        set dstintf "port2"
+        set action accept
+        set srcaddr "all"
+        set dstaddr "DVWA-HTTP-VIP"
+        set schedule "always"
+        set service "ALL"
+    next
+    edit 3
+        set name "Outbound_Access"
         set srcintf "port2"
         set dstintf "port1"
         set action accept
@@ -372,7 +382,7 @@ resource publicIP1Name_resource 'Microsoft.Network/publicIPAddresses@2020-04-01'
   properties: {
     publicIPAllocationMethod: 'Static'
     dnsSettings: {
-      domainNameLabel: '${toLower(deploymentPrefix)}-${uniqueString(resourceGroup().id)}'
+      domainNameLabel: '${toLower(deploymentPrefix)}-fgt-to-dvwa'
     }
   }
 }
@@ -994,5 +1004,7 @@ output fortiGateFQDN string = ((publicIP1NewOrExisting == 'new') ? reference(pub
 output fortiGateAManagementPublicIP string = ((publicIP2NewOrExisting == 'new') ? reference(publicIP2Id).ipAddress : '')
 output fortiGateBManagementPublicIP string = ((publicIP3NewOrExisting == 'new') ? reference(publicIP3Id).ipAddress : '')
 output externalLBFEName string = externalLBFEName
+output fortiGateLBPublicIPFQDN string = ((publicIP1NewOrExisting == 'new') ? reference(publicIP1Id).dnsSettings.fqdn : '')
+
 
 
