@@ -15,6 +15,7 @@ param adminUsername string
 @secure()
 param adminPassword string
 param deploymentPrefix string
+param studentNumber string
 param fortiGateImageSKU string
 param fortiGateImageVersion string
 param fortiGateAdditionalCustomData string
@@ -66,17 +67,17 @@ param subnet7StartAddress string
 
 var imagePublisher = 'fortinet'
 var imageOffer = 'fortinet_fortigate-vm_v5'
-var var_availabilitySetName = '${deploymentPrefix}-FGT-AvailabilitySet'
+var var_availabilitySetName = '${deploymentPrefix}${studentNumber}-FGT-AvailabilitySet'
 var availabilitySetId = {
   id: availabilitySetName.id
 }
-var var_vnetName = ((vnetName == '') ? '${deploymentPrefix}-VNET' : vnetName)
+var var_vnetName = ((vnetName == '') ? '${deploymentPrefix}${studentNumber}-VNET' : vnetName)
 var subnet1Id = ((vnetNewOrExisting == 'new') ? resourceId('Microsoft.Network/virtualNetworks/subnets', var_vnetName, subnet1Name) : resourceId(vnetResourceGroup, 'Microsoft.Network/virtualNetworks/subnets', var_vnetName, subnet1Name))
 var subnet2Id = ((vnetNewOrExisting == 'new') ? resourceId('Microsoft.Network/virtualNetworks/subnets', var_vnetName, subnet2Name) : resourceId(vnetResourceGroup, 'Microsoft.Network/virtualNetworks/subnets', var_vnetName, subnet2Name))
 var subnet3Id = ((vnetNewOrExisting == 'new') ? resourceId('Microsoft.Network/virtualNetworks/subnets', var_vnetName, subnet3Name) : resourceId(vnetResourceGroup, 'Microsoft.Network/virtualNetworks/subnets', var_vnetName, subnet3Name))
 var subnet4Id = ((vnetNewOrExisting == 'new') ? resourceId('Microsoft.Network/virtualNetworks/subnets', var_vnetName, subnet4Name) : resourceId(vnetResourceGroup, 'Microsoft.Network/virtualNetworks/subnets', var_vnetName, subnet4Name))
-var var_fgaVmName = '${deploymentPrefix}-FGT-A'
-var var_fgbVmName = '${deploymentPrefix}-FGT-B'
+var var_fgaVmName = '${deploymentPrefix}${studentNumber}-FGT-A'
+var var_fgbVmName = '${deploymentPrefix}${studentNumber}-FGT-B'
 var fmgCustomData = ((fortiManager == 'yes') ? '\nconfig system central-management\nset type fortimanager\n set fmg ${fortiManagerIP}\nset serial-number ${fortiManagerSerial}\nend\n config system interface\n edit port1\n append allowaccess fgfm\n end\n config system interface\n edit port2\n append allowaccess fgfm\n end\n' : '')
 var fgaCustomDataFlexVM = ((fortiGateLicenseFlexVMA == '') ? '' : 'exec vm-license ${fortiGateLicenseFlexVMA}\n')
 var fgBCustomDataFlexVM = ((fortiGateLicenseFlexVMB == '') ? '' : 'exec vm-license ${fortiGateLicenseFlexVMB}\n')
@@ -144,19 +145,19 @@ var fgbNic4Id = fgbNic4Name.id
 var var_serialConsoleStorageAccountName = 'fgtsc${uniqueString(resourceGroup().id)}'
 var serialConsoleStorageAccountType = 'Standard_LRS'
 var serialConsoleEnabled = ((fgtserialConsole == 'yes') ? true : false)
-var var_publicIP1Name = ((publicIP1Name == '') ? '${deploymentPrefix}-FGT-PIP' : publicIP1Name)
+var var_publicIP1Name = ((publicIP1Name == '') ? '${deploymentPrefix}${studentNumber}-FGT-PIP' : publicIP1Name)
 var publicIP1Id = ((publicIP1NewOrExisting == 'new') ? publicIP1Name_resource.id : resourceId(publicIP1ResourceGroup, 'Microsoft.Network/publicIPAddresses', var_publicIP1Name))
-var var_publicIP2Name = ((publicIP2Name == '') ? '${deploymentPrefix}-FGT-A-MGMT-PIP' : publicIP2Name)
+var var_publicIP2Name = ((publicIP2Name == '') ? '${deploymentPrefix}${studentNumber}-FGT-A-MGMT-PIP' : publicIP2Name)
 var publicIP2Id = ((publicIP2NewOrExisting == 'new') ? publicIP2Name_resource.id : resourceId(publicIP2ResourceGroup, 'Microsoft.Network/publicIPAddresses', var_publicIP2Name))
 var publicIPAddress2Id = {
   id: publicIP2Id
 }
-var var_publicIP3Name = ((publicIP3Name == '') ? '${deploymentPrefix}-FGT-B-MGMT-PIP' : publicIP3Name)
+var var_publicIP3Name = ((publicIP3Name == '') ? '${deploymentPrefix}${studentNumber}-FGT-B-MGMT-PIP' : publicIP3Name)
 var publicIP3Id = ((publicIP3NewOrExisting == 'new') ? publicIP3Name_resource.id : resourceId(publicIP3ResourceGroup, 'Microsoft.Network/publicIPAddresses', var_publicIP3Name))
 var publicIPAddress3Id = {
   id: publicIP3Id
 }
-var var_nsgName = '${deploymentPrefix}-NSG-Allow-All'
+var var_nsgName = '${deploymentPrefix}${studentNumber}-NSG-Allow-All'
 var nsgId = nsgName.id
 var sn1IPArray = split(subnet1Prefix, '.')
 var sn1IPArray2ndString = string(sn1IPArray[3])
@@ -205,10 +206,10 @@ var sn4GatewayIP = '${sn4IPArray0}.${sn4IPArray1}.${sn4IPArray2}.${sn4IPArray3}'
 var sn4IPStartAddress = split(subnet4StartAddress, '.')
 var sn4IPfga = '${sn4IPArray0}.${sn4IPArray1}.${sn4IPArray2}.${int(sn4IPStartAddress[3])}'
 var sn4IPfgb = '${sn4IPArray0}.${sn4IPArray1}.${sn4IPArray2}.${(int(sn4IPStartAddress[3]) + 1)}'
-var var_internalLBName = '${deploymentPrefix}-FGT-ILB'
-var internalLBFEName = '${deploymentPrefix}-ILB-${subnet2Name}-FrontEnd'
+var var_internalLBName = '${deploymentPrefix}${studentNumber}-FGT-ILB'
+var internalLBFEName = '${deploymentPrefix}${studentNumber}-ILB-${subnet2Name}-FrontEnd'
 var internalLBFEId = resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', var_internalLBName, internalLBFEName)
-var internalLBBEName = '${deploymentPrefix}-ILB-${subnet2Name}-BackEnd'
+var internalLBBEName = '${deploymentPrefix}${studentNumber}-ILB-${subnet2Name}-BackEnd'
 var internalLBBEId = resourceId('Microsoft.Network/loadBalancers/backendAddressPools', var_internalLBName, internalLBBEName)
 var internalLBProbeName = 'lbprobe'
 var internalLBProbeId = resourceId('Microsoft.Network/loadBalancers/probes', var_internalLBName, internalLBProbeName)
@@ -220,13 +221,14 @@ var externalLBName_NatRule_FGAdminPerm_fgb = '${var_fgbVmName}FGAdminPerm'
 var externalLBId_NatRule_FGAdminPerm_fgb = resourceId('Microsoft.Network/loadBalancers/inboundNatRules', var_externalLBName, externalLBName_NatRule_FGAdminPerm_fgb)
 var externalLBName_NatRule_SSH_fgb = '${var_fgbVmName}SSH'
 var externalLBId_NatRule_SSH_fgb = resourceId('Microsoft.Network/loadBalancers/inboundNatRules', var_externalLBName, externalLBName_NatRule_SSH_fgb)
-var var_externalLBName = '${deploymentPrefix}-FGT-ELB'
-var externalLBFEName = '${deploymentPrefix}-ELB-${subnet1Name}-FrontEnd'
+var var_externalLBName = '${deploymentPrefix}${studentNumber}-FGT-ELB'
+var externalLBFEName = '${deploymentPrefix}${studentNumber}-ELB-${subnet1Name}-FrontEnd'
 var externalLBFEId = resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', var_externalLBName, externalLBFEName)
-var externalLBBEName = '${deploymentPrefix}-ELB-${subnet1Name}-BackEnd'
+var externalLBBEName = '${deploymentPrefix}${studentNumber}-ELB-${subnet1Name}-BackEnd'
 var externalLBBEId = resourceId('Microsoft.Network/loadBalancers/backendAddressPools', var_externalLBName, externalLBBEName)
 var externalLBProbeName = 'lbprobe'
 var externalLBProbeId = resourceId('Microsoft.Network/loadBalancers/probes', var_externalLBName, externalLBProbeName)
+var domainNameLabel = '${deploymentPrefix}${studentNumber}-fgt-to-dvwa'
 var useAZ = ((!empty(pickZones('Microsoft.Compute', 'virtualMachines', location))) && (availabilityOptions == 'Availability Zones'))
 var zone1 = [
   '1'
@@ -382,7 +384,7 @@ resource publicIP1Name_resource 'Microsoft.Network/publicIPAddresses@2020-04-01'
   properties: {
     publicIPAllocationMethod: 'Static'
     dnsSettings: {
-      domainNameLabel: '${toLower(deploymentPrefix)}-fgt-to-dvwa'
+      domainNameLabel: toLower(domainNameLabel)
     }
   }
 }

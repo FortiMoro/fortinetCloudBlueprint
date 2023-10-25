@@ -12,6 +12,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 param deploymentPrefix string
+param studentNumber string
 param location string
 param adminUsername string
 @secure()
@@ -30,10 +31,10 @@ param dvwaserialConsole string
 //                                                                                                                                 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var vmName = '${deploymentPrefix}-DVWA'
-var vmNicName = '${deploymentPrefix}-DVWA-NIC'
+var vmName = '${deploymentPrefix}${studentNumber}-DVWA'
+var vmNicName = '${deploymentPrefix}${studentNumber}-DVWA-NIC'
 var vmNicId = ubuntuNic.id
-var var_vnetName = ((vnetName == '') ? '${deploymentPrefix}-VNET' : vnetName)
+var var_vnetName = ((vnetName == '') ? '${deploymentPrefix}${studentNumber}-VNET' : vnetName)
 var var_serialConsoleStorageAccountName = 'dvwa${uniqueString(resourceGroup().id)}'
 var serialConsoleStorageAccountType = 'Standard_LRS'
 var serialConsoleEnabled = ((dvwaserialConsole == 'yes') ? true : false)

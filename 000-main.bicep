@@ -60,7 +60,10 @@ param adminUsername string
 param adminPassword string
 
 @description('Naming prefix for all deployed resources.')
-param deploymentPrefix string
+param deploymentPrefix string = 'xpaca'
+
+@description('XPA Student Number.')
+param studentNumber string
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                                                                 //
@@ -442,6 +445,7 @@ module networkTemplate '001-network.bicep' = {
   name: 'networkDeployment'
   params: {
     deploymentPrefix: deploymentPrefix
+    studentNumber: studentNumber
     fortinetTags: fortinetTags   
     location: location
     subnet1Name: subnet1Name
@@ -475,6 +479,7 @@ module fortiGateTemplate '002-fortigate.bicep' = {
     adminUsername: adminUsername
     availabilityOptions: availabilityOptions
     deploymentPrefix: deploymentPrefix
+    studentNumber: studentNumber
     fortiGateAdditionalCustomData: fortiGateAdditionalCustomData
     fortiGateImageSKU: fortiGateImageSKU
     fortiGateImageVersion: fortiGateImageVersion
@@ -531,6 +536,7 @@ module fortiWebTemplate '003-fortiweb.bicep' = if (deployFortiWeb == 'yes') {
     adminUsername: adminUsername
     availabilityOptions: availabilityOptions
     deploymentPrefix: deploymentPrefix
+    studentNumber: studentNumber
     fortinetTags: fortinetTags
     fortiWebAAdditionalCustomData:fortiWebAAdditionalCustomData
     fortiWebBAdditionalCustomData:fortiWebBAdditionalCustomData
@@ -565,6 +571,7 @@ module dvwaTemplate '004-dvwa.bicep' = if (deployDVWA == 'yes') {
     adminPassword: adminPassword
     adminUsername:  adminUsername
     deploymentPrefix: deploymentPrefix 
+    studentNumber: studentNumber
     location: location
     subnet7Name: subnet7Name
     subnet7Prefix: subnet7Prefix

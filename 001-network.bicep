@@ -13,6 +13,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 param location string
+param studentNumber string
 param deploymentPrefix string
 param vnetNewOrExisting string
 param vnetName string
@@ -41,10 +42,10 @@ param onPremRange string
 //                                                                                                                                 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var var_vnet_Name = ((vnetName == '') ? '${deploymentPrefix}-VNET' : vnetName)
-var routeTable7Name = '${deploymentPrefix}-RouteTable-${subnet7Name}'
+var var_vnet_Name = ((vnetName == '') ? '${deploymentPrefix}${studentNumber}-VNET' : vnetName)
+var routeTable7Name = '${deploymentPrefix}${studentNumber}-RouteTable-${subnet7Name}'
 var routeTable7Id = routeTable7.id
-var routeTable5Name = '${deploymentPrefix}-RouteTable-${subnet5Name}'
+var routeTable5Name = '${deploymentPrefix}${studentNumber}-RouteTable-${subnet5Name}'
 var routeTable5Id = routeTable5.id
 var sn2IPArray = split(subnet2Prefix, '.')
 var sn2IPArray2 = string(int(sn2IPArray[2]))
