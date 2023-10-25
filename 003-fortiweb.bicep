@@ -86,7 +86,7 @@ var fwbbCustomDataCombined = {
   'usr-cli': fwbBCustomDataBody
 }
 var fwbBCustomData = base64(string(fwbbCustomDataCombined))
-var configFortiGateIntegrationB = 'config system fortigate-integration\n set address ${subnet4StartAddress}\n set port 443\n set protocol HTTPS\n set username ${adminUsername}\n set password ${adminPassword}\n set flag enable\n end\n'
+var configFortiGateIntegrationB = 'config system fortigate-integration\n set server ${subnet4StartAddress}\n set port 443\n set protocol HTTPS\n set username ${adminUsername}\n set password ${adminPassword}\n set flag enable\n end\n'
 var var_fwbAVmName = '${deploymentPrefix}-FWB-A'
 var var_fwbBVmName = '${deploymentPrefix}-FWB-B'
 var var_fwbANic1Name = '${var_fwbAVmName}-Nic1'
