@@ -818,6 +818,15 @@ next
 end
 config waf cookie-security
 edit "DVWA_COOKIE_SECURITY"
+config cookie-security-exception-list
+edit 1
+set cookie-name APSCOOKIE*
+set wildcard enable
+next
+edit 2
+set cookie-name shortscc
+next
+end
 set security-mode signed
 set action alert_deny
 set severity Medium
