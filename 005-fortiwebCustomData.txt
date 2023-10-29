@@ -822,6 +822,7 @@ set security-mode signed
 set action alert_deny
 set severity Medium
 set secure-cookie enable
+set allow-suspicious-cookies Never
 next
 end
 config waf web-protection-profile inline-protection
