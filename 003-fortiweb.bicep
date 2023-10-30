@@ -388,6 +388,7 @@ resource externalLBName 'Microsoft.Network/loadBalancers@2022-05-01' = {
           backendPort: 443
           enableFloatingIP: true
           idleTimeoutInMinutes: 5
+          loadDistribution: 'SourceIP'
         }
         name: 'PublicLBRule-FE1-https'
       }
