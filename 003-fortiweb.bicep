@@ -43,6 +43,8 @@ param location string
 param fortinetTags object
 param vnetAddressPrefix string
 param subnet7StartAddress string
+param fortiWebALicenseFortiFlex string
+param fortiWebBLicenseFortiFlex string
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                                                                 //
@@ -64,8 +66,9 @@ var fwbACustomDataBodyHA = 'config system ha\n set mode active-active-high-volum
 var fwbACustomDataBody = '${fwbGlobalDataBody}${fwbACustomDataBodyHA}${fwbACustomDataPreconfig}${fortiWebAAdditionalCustomData}\n'
 var fwbACustomDataCombined = { 
   'cloud-initd' : 'enable'
-  'usr-cli': fwbACustomDataBody
-  }
+  'usr-cli' : fwbACustomDataBody
+  'flex_token' : fortiWebALicenseFortiFlex
+}
 var fwbACustomDataPreconfig = '${fwbAStaticPort2IP}${fwbCustomDataVIP}${fwbStaticRoute}${fwbServerPool}${configFortiGateIntegrationA}${letsEncrypt}${wvsProfile}${wvsPolicy}${bulkPoCConfig}\n'
 var fwbCustomDataVIP = 'config system vip\n edit "DVWA_VIP"\n set vip ${reference(publicIPId).ipAddress}/32\n set interface port1\n next\n end\n'
 var fwbAStaticPort2IP = 'config system interface\n edit "port2"\n set type physical\n set mode static\n set ip ${sn2IPfwbA}/${subnet6cidrvalue}\n end\n'
@@ -85,6 +88,7 @@ var fwbBCustomDataPreconfig = '${fwbBStaticPort2IP}${fwbCustomDataVIP}${fwbStati
 var fwbbCustomDataCombined = { 
   'cloud-initd': 'enable'
   'usr-cli': fwbBCustomDataBody
+  'flex_token': fortiWebBLicenseFortiFlex
 }
 var fwbBCustomData = base64(string(fwbbCustomDataCombined))
 var configFortiGateIntegrationB = 'config system fortigate-integration\n set server ${subnet4StartAddress}\n set port 443\n set protocol HTTPS\n set username ${adminUsername}\n set password ${adminPassword}\n set flag enable\n end\n'
