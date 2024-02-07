@@ -103,21 +103,8 @@ var serialConsoleStorageAccountType = 'Standard_LRS'
 var serialConsoleEnabled = ((fwbserialConsole == 'yes') ? true : false)
 var var_publicIPName = ((publicIPName == '') ? '${deploymentPrefix}-FWB-PIP' : publicIPName)
 var publicIPId = ((publicIPNewOrExistingOrNone == 'new') ? publicIPName_resource.id : resourceId(publicIPResourceGroup, 'Microsoft.Network/publicIPAddresses', var_publicIPName))
-var publicIPAddressId = {
-  id: publicIPId
-}
-var ilbProperties = {
-  properties: {
-    privateIPAddress: sn1IPlb
-    privateIPAllocationMethod: 'Static'
-    Subnet: subnet5Id
-  }
-}
-var elbProperties = {
-  properties: {
-    publicIPAddress: publicIPAddressId
-  }
-}
+
+
 var var_NSGName = '${deploymentPrefix}-${uniqueString(resourceGroup().id)}-NSG'
 var NSGId = NSGName.id
 var sn1IPArray = split(subnet5Prefix, '.')
@@ -343,7 +330,11 @@ resource externalLBName 'Microsoft.Network/loadBalancers@2022-05-01' = {
     frontendIPConfigurations: [
       {
         name: externalLBFEName
-        properties: ((publicIPNewOrExistingOrNone == 'none') ? ilbProperties.properties : elbProperties.properties)
+        properties: {
+          publicIPAddress: {
+            id: publicIPId
+          }
+        }
       }
     ]
     backendAddressPools: [
