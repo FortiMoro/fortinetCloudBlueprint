@@ -363,13 +363,13 @@ param fortiGateLicenseFlexVMB string = ''
   'fortinet_fw-vm'
   'fortinet_fw-vm_payg_v2'
 ])
-param fortiWebImageSKU string = 'fortinet_fw-vm_payg_v2'
+param fortiWebImageSKU string = 'fortinet_fw-vm'
 
 @description('FortiFlex Token for FortiWeb-A')
-param fortiWebALicenseFortiFlex string = ''
+param fortiWebALicenseFortiFlex string 
 
 @description('FortiFlex Token for FortiWeb-B')
-param fortiWebBLicenseFortiFlex string = ''
+param fortiWebBLicenseFortiFlex string 
 
 @description('FortiWeb versions available in the Azure Marketplace. Additional version can be downloaded via https://support.fortinet.com/')
 @allowed([
