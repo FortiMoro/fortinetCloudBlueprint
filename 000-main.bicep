@@ -366,10 +366,16 @@ param fortiGateLicenseFlexVMB string = ''
 param fortiWebImageSKU string = 'fortinet_fw-vm'
 
 @description('FortiFlex Token for FortiWeb-A')
-param fortiWebALicenseFortiFlex string 
+param fortiWebALicenseFortiFlex string = ''
 
 @description('FortiFlex Token for FortiWeb-B')
-param fortiWebBLicenseFortiFlex string 
+param fortiWebBLicenseFortiFlex string = ''
+
+@description('BYOL License Content for FortiWeb-A')
+param fortiWebALicenseBYOL string = ''
+
+@description('BYOL License Content for FortiWeb-B')
+param fortiWebBLicenseBYOL string = ''
 
 @description('FortiWeb versions available in the Azure Marketplace. Additional version can be downloaded via https://support.fortinet.com/')
 @allowed([
@@ -561,6 +567,8 @@ module fortiWebTemplate '003-fortiweb.bicep' = if (deployFortiWeb == 'yes') {
     vnetResourceGroup: vnetResourceGroup
     fortiWebALicenseFortiFlex: fortiWebALicenseFortiFlex
     fortiWebBLicenseFortiFlex: fortiWebBLicenseFortiFlex
+    fortiWebALicenseBYOL: fortiWebALicenseBYOL
+    fortiWebBLicenseBYOL: fortiWebBLicenseBYOL
      }
   dependsOn: [
     fortiGateTemplate
