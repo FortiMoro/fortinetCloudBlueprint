@@ -110,7 +110,7 @@ var ilbProperties = {
   properties: {
     privateIPAddress: sn1IPlb
     privateIPAllocationMethod: 'Static'
-    subnet: subnet5Id
+    Subnet: subnet5Id
   }
 }
 var elbProperties = {
