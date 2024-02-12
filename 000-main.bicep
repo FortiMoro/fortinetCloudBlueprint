@@ -363,7 +363,7 @@ param fortiGateLicenseFlexVMB string = ''
   'fortinet_fw-vm'
   'fortinet_fw-vm_payg_v2'
 ])
-param fortiWebImageSKU string = 'fortinet_fw-vm'
+param fortiWebImageSKU string = 'fortinet_fw-vm_payg_v2'
 
 @description('FortiFlex Token for FortiWeb-A')
 param fortiWebALicenseFortiFlex string = ''
