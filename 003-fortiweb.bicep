@@ -69,9 +69,9 @@ var fwbACustomDataBody = '${fwbGlobalDataBody}${fwbACustomDataBodyHA}${fwbACusto
 var fwbACustomDataCombined = { 
   'cloud-initd' : 'enable'
   'usr-cli' : fwbACustomDataBody
-  'flex_token' : fortiWebALicenseFortiFlex
-  'FwbLicenseBYOL' : fortiWebALicenseBYOL
-}
+  flex_token: fortiWebALicenseFortiFlex
+  FwbLicenseBYOL: fortiWebALicenseBYOL
+ }
 var fwbACustomDataPreconfig = '${fwbAStaticPort2IP}${fwbCustomDataVIP}${fwbStaticRoute}${fwbServerPool}${configFortiGateIntegrationA}${letsEncrypt}${wvsProfile}${wvsPolicy}${bulkPoCConfig}\n'
 var fwbCustomDataVIP = 'config system vip\n edit "DVWA_VIP"\n set vip ${reference(publicIPId).ipAddress}/32\n set interface port1\n next\n end\n'
 var fwbAStaticPort2IP = 'config system interface\n edit "port2"\n set type physical\n set mode static\n set ip ${sn2IPfwbA}/${subnet6cidrvalue}\n end\n'
@@ -83,7 +83,6 @@ var letsEncrypt = 'config system certificate letsencrypt\n edit "DVWA_LE_CERTIFI
 var wvsProfile = 'config wvs profile\n edit "DVWASCANPROFILE"\n set scan-target https://${sn1IPfwbA}\n set scan-template "OWASP Top 10"\n set custom-header0 "Cookie: security=low; PHPSESSID=XXXXXXXXXXXXXXXXXXXX"\n set form-based-authentication enable\n set form-based-username pablo\n set form-based-password letmein\n set form-based-auth-url https://${sn1IPfwbA}/login.php\n set username-field username\n set password-field password\n set session-check-url https://10.0.5.5/index.php\n set session-check-string Welcome\n set data-format %u=%U&%p=%P\n next\n end\n'
 var wvsPolicy = 'config wvs policy\n edit "DVWASCANPOLICY"\n set report_format html xml pdf\n set profile DVWASCANPROFILE\n next\n end\n'
 var bulkPoCConfig = loadTextContent('005-fortiwebCustomData.txt')
-
 var fwbACustomData = base64(string(fwbACustomDataCombined))
 var fwbBCustomDataBodyHA = 'config system ha\n set mode active-active-high-volume\n set group-id ${fortiWebHaGroupId}\n set group-name ${toLower(deploymentPrefix)}\n set priority 2\n set tunnel-local ${sn2IPfwbB}\n set tunnel-peer ${sn2IPfwbA}\n set monitor port1 port2\n set override enable\n end\n'
 var fwbBCustomDataBody = '${fwbGlobalDataBody}${fwbBCustomDataBodyHA}${fwbBCustomDataPreconfig}${fortiWebBAdditionalCustomData}\n'
@@ -91,8 +90,8 @@ var fwbBCustomDataPreconfig = '${fwbBStaticPort2IP}${fwbCustomDataVIP}${fwbStati
 var fwbbCustomDataCombined = { 
   'cloud-initd': 'enable'
   'usr-cli': fwbBCustomDataBody
-  'flex_token': fortiWebBLicenseFortiFlex
-  'FwbLicenseBYOL' : fortiWebBLicenseBYOL
+  flex_token: fortiWebBLicenseFortiFlex
+  FwbLicenseBYOL : fortiWebBLicenseBYOL
 }
 var fwbBCustomData = base64(string(fwbbCustomDataCombined))
 var configFortiGateIntegrationB = 'config system fortigate-integration\n set server ${subnet4StartAddress}\n set port 443\n set protocol HTTPS\n set username ${adminUsername}\n set password ${adminPassword}\n set flag enable\n end\n'
@@ -111,8 +110,6 @@ var serialConsoleStorageAccountType = 'Standard_LRS'
 var serialConsoleEnabled = ((fwbserialConsole == 'yes') ? true : false)
 var var_publicIPName = ((publicIPName == '') ? '${deploymentPrefix}-FWB-PIP' : publicIPName)
 var publicIPId = ((publicIPNewOrExistingOrNone == 'new') ? publicIPName_resource.id : resourceId(publicIPResourceGroup, 'Microsoft.Network/publicIPAddresses', var_publicIPName))
-
-
 var var_NSGName = '${deploymentPrefix}-${uniqueString(resourceGroup().id)}-NSG'
 var NSGId = NSGName.id
 var sn1IPArray = split(subnet5Prefix, '.')
