@@ -26,12 +26,6 @@
 //                                                                                                                                 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-@description ('Do you want to deploy a FortiWeb as a part of this Template (Y/N)')
-@allowed([
-  'yes'
-  'no'
-])
-param deployFortiWeb string = 'yes'
 
 @description ('Do you want to deploy a DVWA Instance as a part of this Template (Y/N)')
 @allowed([
@@ -371,12 +365,6 @@ param fortiWebALicenseFortiFlex string = ''
 @description('FortiFlex Token for FortiWeb-B')
 param fortiWebBLicenseFortiFlex string = ''
 
-@description('BYOL License Content for FortiWeb-A')
-param fortiWebALicenseBYOL string = ''
-
-@description('BYOL License Content for FortiWeb-B')
-param fortiWebBLicenseBYOL string = ''
-
 @description('FortiWeb versions available in the Azure Marketplace. Additional version can be downloaded via https://support.fortinet.com/')
 @allowed([
   '6.3.17'
@@ -532,7 +520,7 @@ module fortiGateTemplate '002-fortigate.bicep' = {
   ]
 }
 
-module fortiWebTemplate '003-fortiweb.bicep' = if (deployFortiWeb == 'yes') {
+module fortiWebTemplate '003-fortiweb.bicep' = if (fortiWebImageSKU == 'fortinet_fw-vm') {
   name: 'fortiwebDeployment'
   params: {
     subnet4StartAddress: subnet4StartAddress
@@ -567,8 +555,45 @@ module fortiWebTemplate '003-fortiweb.bicep' = if (deployFortiWeb == 'yes') {
     vnetResourceGroup: vnetResourceGroup
     fortiWebALicenseFortiFlex: fortiWebALicenseFortiFlex
     fortiWebBLicenseFortiFlex: fortiWebBLicenseFortiFlex
-    fortiWebALicenseBYOL: fortiWebALicenseBYOL
-    fortiWebBLicenseBYOL: fortiWebBLicenseBYOL
+     }
+  dependsOn: [
+    fortiGateTemplate
+  ]
+}
+
+module fortiWebTemplatePAYG '003-fortiwebPAYG.bicep' = if (fortiWebImageSKU == 'fortinet_fw-vm_payg_v2') {
+  name: 'fortiwebDeploymentPAYG'
+  params: {
+    subnet4StartAddress: subnet4StartAddress
+    subnet7StartAddress: subnet7StartAddress
+    vnetAddressPrefix: vnetAddressPrefix
+    acceleratedNetworking: acceleratedNetworking
+    adminPassword: adminPassword
+    adminUsername: adminUsername
+    availabilityOptions: availabilityOptions
+    deploymentPrefix: deploymentPrefix
+    fortinetTags: fortinetTags
+    fortiWebAAdditionalCustomData:fortiWebAAdditionalCustomData
+    fortiWebBAdditionalCustomData:fortiWebBAdditionalCustomData
+    fortiWebHaGroupId: fortiWebHaGroupId
+    fortiWebImageSKU: fortiWebImageSKU
+    fortiWebImageVersion: fortiWebImageVersion
+    fwbserialConsole: fwbserialConsole
+    instanceType: instanceType
+    location: location
+    publicIPName: publicIPName
+    publicIPNewOrExistingOrNone: publicIPNewOrExistingOrNone
+    publicIPResourceGroup: publicIPResourceGroup
+    publicIPType: publicIPType
+    subnet5Name: subnet5Name
+    subnet5Prefix: subnet5Prefix
+    subnet5StartAddress: subnet5StartAddress
+    subnet6Name: subnet6Name
+    subnet6Prefix:subnet6Prefix 
+    subnet6StartAddress: subnet6StartAddress
+    vnetName:vnetName 
+    vnetNewOrExisting: vnetNewOrExisting
+    vnetResourceGroup: vnetResourceGroup
      }
   dependsOn: [
     fortiGateTemplate
@@ -591,7 +616,7 @@ module dvwaTemplate '004-dvwa.bicep' = if (deployDVWA == 'yes') {
     dvwaserialConsole: dvwaserialConsole
   }
   dependsOn: [
-    fortiWebTemplate
+    fortiGateTemplate
   ]
 }
 
@@ -608,9 +633,9 @@ module dvwaTemplate '004-dvwa.bicep' = if (deployDVWA == 'yes') {
 
 output dvwaSSHviaFortiGate string = '${fortiGateTemplate.outputs.fortiGatePublicIP}:22'
 output dvwaHTTPviaFortiGate string = 'http://${fortiGateTemplate.outputs.fortiGateLBPublicIPFQDN}:80'
-output dvwaHTTPviaFortiWeb string = 'http://${fortiWebTemplate.outputs.fortiWebPublicIP}:80'
+output dvwaHTTPviaFortiWeb string = (fortiWebImageSKU == 'fortinet_fw-vm' ? 'http://${fortiWebTemplate.outputs.fortiWebPublicIP}:80' : 'http://${fortiWebTemplatePAYG.outputs.fortiWebPublicIP}:80')
 output fortiGateAManagementConsole string = 'https://${fortiGateTemplate.outputs.fortiGateAManagementPublicIP}:443'
 output fortiGateBManagementConsole string = 'https://${fortiGateTemplate.outputs.fortiGateBManagementPublicIP}:443'
-output fortiWebAManagementConsole string = 'https://${fortiWebTemplate.outputs.fortiWebPublicIP}:40030'
-output fortiWebBManagementConsole string = 'https://${fortiWebTemplate.outputs.fortiWebPublicIP}:40031'
+output fortiWebAManagementConsole string = (fortiWebImageSKU == 'fortinet_fw-vm' ? 'https://${fortiWebTemplate.outputs.fortiWebPublicIP}:40030' : 'https://${fortiWebTemplatePAYG.outputs.fortiWebPublicIP}:40030')
+output fortiWebBManagementConsole string = (fortiWebImageSKU == 'fortinet_fw-vm' ? 'https://${fortiWebTemplate.outputs.fortiWebPublicIP}:40031' : 'https://${fortiWebTemplatePAYG.outputs.fortiWebPublicIP}:40031')
 
