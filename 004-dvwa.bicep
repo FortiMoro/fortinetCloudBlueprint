@@ -47,6 +47,15 @@ var sn7IPUbuntu = '${sn7IPArray0}.${sn7IPArray1}.${sn7IPArray2}.${int(sn7IPStart
 var vmCustomDataBody = '''
 #!/bin/bash
 exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+#Import GPG Key
+echo "Importing AlmaLinux 8 new GPG Key"
+# Wait for the URL to be reachable
+echo "Waiting for RPM-GPG-KEY-AlmaLinux to be reachable"
+until rpm --import https://repo.almalinux.org/almalinux/RPM-GPG-KEY-AlmaLinux
+do
+    rpm --import https://repo.almalinux.org/almalinux/RPM-GPG-KEY-AlmaLinux
+    sleep 2
+done
 #Wait for the repo 
 echo "Waiting for repo to be reacheable"
 curl --retry 20 -s -o /dev/null "https://download.docker.com/linux/centos/docker-ce.repo"
