@@ -4,11 +4,11 @@
 
 The purpose of this architecture is to provide the user with a set of templates that will deploy and preconfigure perimeter solution that addresses the dynamic needs of an environment, while optimizing for security. The templates are equipped with a FortiGate Next Generation Firewall, FortiWeb WAF and DVWA Endpoint. While the WAF is designed to secure your Web Servers against inbound attacks over HTTP/HTTPs, the Next Generation Firewall is a General Purpose tool that will enable your connectivity (IPSec, SSL VPN, SDWAN) in addition to offering Multi-Protocol security and being your primary egress mechanism.
 
-![fgfwb](https://raw.githubusercontent.com/AJLab-GH/fortinetCloudBlueprint/staging/Images/fgfwb.png)
+![fgfwb](https://raw.githubusercontent.com/FortiMoro/fortinetCloudBlueprint/staging/Images/fgfwb.png)
 
 The FortiGate and FortiWeb in this solution compliment one-another. The FortiWeb has advanced features that the FortiGate does not, but can only apply those protections to HTTP, HTTPs. The FortiGate can support a variety of protocols, perform dynamic routing, terminate VPN, perform SD-WAN and so much more.
 
-![DesignConsiderations](https://raw.githubusercontent.com/AJLab-GH/fortinetCloudBlueprint/staging/Images/designconsiderations.png)
+![DesignConsiderations](https://raw.githubusercontent.com/FortiMoro/fortinetCloudBlueprint/staging/Images/designconsiderations.png)
 
 ## Introduction
 
@@ -42,7 +42,7 @@ This Azure BICEP template will automatically deploy a full working environment c
 - 4 public IP for services and FortiGate/FortiWeb management
 - User Defined Routes (UDR) to ensure full end-to-end communication via the FortiGate/FortiWeb deployment
 
-![Detailed View](https://raw.githubusercontent.com/AJLab-GH/fortinetCloudBlueprint/staging/Images/Detailed%20View.png)
+![Detailed View](https://raw.githubusercontent.com/FortiMoro/fortinetCloudBlueprint/staging/Images/Detailed%20View.png)
 
 To enhance the availability of the solution VM can be installed in different Availability Zones instead of an Availability Set. If Availability Zones deployment is selected but the location does not support Availability Zones an Availability Set will be deployed. If Availability Zones deployment is selected and Availability Zones are available in the location, FortiGate A will be placed in Zone 1, FortiGate B will be placed in Zone 2.
 
@@ -105,7 +105,7 @@ To deploy via Azure Cloud Shell, connect via the Azure Portal or directly to [ht
 
 ```text
 az bicep upgrade
-git clone https://github.com/AJLab-GH/fortinetCloudBlueprint.git
+git clone https://github.com/FortiMoro/fortinetCloudBlueprint.git
 cd fortinetCloudBlueprint
 ```
 
@@ -115,7 +115,7 @@ cd fortinetCloudBlueprint
 az group create --location (location) --name (resourceGroupName)
 ```
 
-![Create Resource Group](https://raw.githubusercontent.com/AJLab-GH/fortinetCloudBlueprint/staging/Images/createRG.png)
+![Create Resource Group](https://raw.githubusercontent.com/FortiMoro/fortinetCloudBlueprint/staging/Images/createRG.png)
 
 - Accept the terms for the PAYG or BYOL images in the Azure Marketplace before creating a deployment.
 
@@ -146,7 +146,7 @@ az vm image terms accept --publisher fortinet --offer fortinet_fortiweb-vm_v5 --
 ```
 The script will ask you a few questions to bootstrap a full deployment.
 
-![Input Variables](https://raw.githubusercontent.com/AJLab-GH/fortinetCloudBlueprint/staging/Images/ProvideValue.png)
+![Input Variables](https://raw.githubusercontent.com/FortiMoro/fortinetCloudBlueprint/staging/Images/ProvideValue.png)
 
 After deployment you can output the important values such as public IP addresses, etc that you'll need to connect to your deployment.
 
@@ -154,7 +154,7 @@ After deployment you can output the important values such as public IP addresses
 az deployment group show -g (resourceGroupName) -n (deploymentName) --query properties.outputs
 ```
 
-![Input Variables](https://raw.githubusercontent.com/AJLab-GH/fortinetCloudBlueprint/staging/Images/Outputs.png)
+![Input Variables](https://raw.githubusercontent.com/FortiMoro/fortinetCloudBlueprint/staging/Images/Outputs.png)
 
 #### Deleting the Deployment
 
