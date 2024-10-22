@@ -4,7 +4,7 @@
 
 The purpose of this architecture is to provide the user with a set of templates that will deploy and preconfigure perimeter solution that addresses the dynamic needs of an environment, while optimizing for security. The templates are equipped with a FortiGate Next Generation Firewall, FortiWeb WAF and DVWA Endpoint. While the WAF is designed to secure your Web Servers against inbound attacks over HTTP/HTTPs, the Next Generation Firewall is a General Purpose tool that will enable your connectivity (IPSec, SSL VPN, SDWAN) in addition to offering Multi-Protocol security and being your primary egress mechanism.
 
-![fgfwb]([https://github.com/FortiMoro/fortinetCloudBlueprint/Images/fgfwb.png)
+![fgfwb](https://github.com/FortiMoro/fortinetCloudBlueprint/Images/fgfwb.png)
 
 The FortiGate and FortiWeb in this solution compliment one-another. The FortiWeb has advanced features that the FortiGate does not, but can only apply those protections to HTTP, HTTPs. The FortiGate can support a variety of protocols, perform dynamic routing, terminate VPN, perform SD-WAN and so much more.
 
